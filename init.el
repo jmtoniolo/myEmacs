@@ -724,18 +724,18 @@
 ;; We want to be able to see if there is a tab character vs a space.
 ;; global-whitespace-mode allows us to do just that.
 ;; Set whitespace mode to only show tabs, not newlines/spaces.
-(use-package whitespace
-  :ensure t
-  :diminish global-whitespace-mode
-  :init
-  (eval-when-compile
-      ;; Silence missing function warnings
-      (declare-function global-whitespace-mode "whitespace.el"))
-  :config
-  (setq whitespace-style '(lines-tail trailing tabs tab-mark))
-  ;; Turn on whitespace mode globally.
-  (global-whitespace-mode t)
-  )
+;; (use-package whitespace
+;;   :ensure t
+;;   :diminish global-whitespace-mode
+;;   :init
+;;   (eval-when-compile
+;;       ;; Silence missing function warnings
+;;       (declare-function global-whitespace-mode "whitespace.el"))
+;;   :config
+;;   (setq whitespace-style '(lines-tail trailing tabs tab-mark))
+;;   ;; Turn on whitespace mode globally.
+;;   (global-whitespace-mode t)
+;;   )
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;; Package: lsp (language server protocol mode)
@@ -849,7 +849,9 @@
     (declare-function global-flycheck-mode "flycheck.el"))
   :config
   ;; Turn flycheck on everywhere
-  (global-flycheck-mode t)
+  ;;(global-flycheck-mode t)
+  ;;enable flycheck for c++ only
+  (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
   ;; There are issues with company mode and flycheck in terminal mode.
   ;; This is outlined at:
   ;; https://github.com/abingham/emacs-ycmd

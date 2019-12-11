@@ -112,6 +112,8 @@
                                (setq gc-cons-threshold 800000)))
 
 
+;;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+;;appearance and key bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tweaks
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -159,104 +161,6 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; Disable the horrid auto-save
 (setq auto-save-default nil)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; xml mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'auto-mode-alist '("\\.xsd\\'" . xml-mode))
-(add-to-list 'auto-mode-alist '("\\.xslt\\'" . xml-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; sr speedbar
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package sr-speedbar
-  :ensure t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; expand region
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package expand-region
-  :ensure t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; highlight mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package idle-highlight-mode
-  :ensure t)
-(add-hook 'prog-mode-hook (lambda () (idle-highlight-mode t)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; diminish - Hide the minor modes in the mode line for more room
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package diminish
-  :ensure t
-  :init
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function diminish "diminish.el"))
-  :config
-  (diminish 'abbrev-mode)
-  (diminish 'eldoc-mode)
-  (diminish 'auto-revert-mode)
-  )
-
-(use-package swiper
-  :ensure t
-  )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Rainbow Delimiters -  have delimiters be colored by their depth
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package rainbow-delimiters
-  :ensure t
-  :init
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function rainbow-delimiters-mode "rainbow-delimiters.el"))
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Beacon-mode: flash the cursor when switching buffers or scrolling
-;;              the goal is to make it easy to find the cursor
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package beacon
-  :ensure t
-  :diminish beacon-mode
-  :init
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function beacon-mode "beacon.el"))
-  :config
-  (beacon-mode t))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Use undo-tree to navigate undo history
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package undo-tree
-  :ensure t
-  :diminish undo-tree-mode
-  :defer 1
-  :config
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function global-undo-tree-mode "undo-tree.el"))
-  (global-undo-tree-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; autopair
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Automatically at closing brace, bracket and quote
-(use-package autopair
-  :ensure t
-  :diminish autopair-mode
-  :init
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function autopair-global-mode "autopair.el"))
-  :config
-  (autopair-global-mode t)
-  )
-
 ;; Compilation command for C/C++
 (setq compile-command "g++ -std=c++14 ")
 ;; Global Keyboard Shortcuts
@@ -550,15 +454,21 @@
         (counsel-grep initial-input))))
   )
 
-
-;; bring up help for key bindings
+;;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+;;packages and functionality
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; key binding guide
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package which-key
   :ensure t
   :config
   (which-key-mode))
 
 
-;; Auto completion
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; simple autocomplete
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package auto-complete
   :ensure t
   :init
@@ -568,7 +478,107 @@
     ))
 
 
-;; on the fly syntax checking
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; xml mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'auto-mode-alist '("\\.xsd\\'" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.xslt\\'" . xml-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; sr speedbar
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package sr-speedbar
+  :ensure t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; expand region
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package expand-region
+  :ensure t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; highlight mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package idle-highlight-mode
+  :ensure t)
+(add-hook 'prog-mode-hook (lambda () (idle-highlight-mode t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; diminish - Hide the minor modes in the mode line for more room
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package diminish
+  :ensure t
+  :init
+  (eval-when-compile
+    ;; Silence missing function warnings
+    (declare-function diminish "diminish.el"))
+  :config
+  (diminish 'abbrev-mode)
+  (diminish 'eldoc-mode)
+  (diminish 'auto-revert-mode)
+  )
+
+(use-package swiper
+  :ensure t
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Rainbow Delimiters -  have delimiters be colored by their depth
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package rainbow-delimiters
+  :ensure t
+  :init
+  (eval-when-compile
+    ;; Silence missing function warnings
+    (declare-function rainbow-delimiters-mode "rainbow-delimiters.el"))
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Beacon-mode: flash the cursor when switching buffers or scrolling
+;;              the goal is to make it easy to find the cursor
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package beacon
+  :ensure t
+  :diminish beacon-mode
+  :init
+  (eval-when-compile
+    ;; Silence missing function warnings
+    (declare-function beacon-mode "beacon.el"))
+  :config
+  (beacon-mode t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Use undo-tree to navigate undo history
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package undo-tree
+  :ensure t
+  :diminish undo-tree-mode
+  :defer 1
+  :config
+  (eval-when-compile
+    ;; Silence missing function warnings
+    (declare-function global-undo-tree-mode "undo-tree.el"))
+  (global-undo-tree-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; autopair
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Automatically at closing brace, bracket and quote
+(use-package autopair
+  :ensure t
+  :diminish autopair-mode
+  :init
+  (eval-when-compile
+    ;; Silence missing function warnings
+    (declare-function autopair-global-mode "autopair.el"))
+  :config
+  (autopair-global-mode t)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; inline syntax checking
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package flycheck
   :ensure t
   :init

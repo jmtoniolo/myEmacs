@@ -457,6 +457,11 @@
 ;;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ;;packages and functionality
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; debugger
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;(setq gdb-many-windows 1)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; key binding guide
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package which-key
@@ -504,6 +509,20 @@
   :ensure t)
 (add-hook 'prog-mode-hook (lambda () (idle-highlight-mode t)))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Use undo-tree to navigate undo history
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package undo-tree
+  :ensure t
+  :diminish undo-tree-mode
+  ;;:defer 1
+  :config
+  (eval-when-compile
+    ;; Silence missing function warnings
+    (declare-function global-undo-tree-mode "undo-tree.el"))
+  (global-undo-tree-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; diminish - Hide the minor modes in the mode line for more room
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -549,19 +568,6 @@
   (beacon-mode t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Use undo-tree to navigate undo history
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package undo-tree
-  :ensure t
-  :diminish undo-tree-mode
-  :defer 1
-  :config
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function global-undo-tree-mode "undo-tree.el"))
-  (global-undo-tree-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; autopair
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Automatically at closing brace, bracket and quote
@@ -585,6 +591,9 @@
   (global-flycheck-mode t))
 
 (provide 'init)
+
+(defun display-startup-echo-area-message ()
+  (message "Ready"))
 ;;; init.el ends here
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -593,4 +602,5 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck auto-complete which-key counsel powerline spacemacs-theme autopair undo-tree beacon rainbow-delimiters swiper diminish idle-highlight-mode expand-region sr-speedbar auto-package-update use-package))))
+    (flymake-python-pyflakes flycheck auto-complete which-key counsel powerline spacemacs-theme autopair undo-tree beacon rainbow-delimiters swiper diminish idle-highlight-mode expand-region sr-speedbar auto-package-update use-package))))
+

@@ -164,6 +164,8 @@
 ;; Compilation command for C/C++
 (setq compile-command "g++ -std=c++14 ")
 ;; Global Keyboard Shortcuts
+;;show whitespace
+(global-set-key (kbd "<f10>") 'whitespace-mode)
 ;; speedbar
 (global-set-key (kbd "<f8>") 'sr-speedbar-toggle)
 ;; Set help to C-?

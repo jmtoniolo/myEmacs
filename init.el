@@ -111,7 +111,6 @@
                                ;; restore after startup
                                (setq gc-cons-threshold 800000)))
 
-
 ;;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ;;appearance and key bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -135,11 +134,22 @@
 (global-hl-line-mode t)
 ;; Disable the toolbar at the top since it's useless
 (tool-bar-mode -1)
-;; Change tab key behavior to insert spaces instead
-(setq-default indent-tabs-mode nil)
-;; Set the number of spaces that the tab key inserts (usually 2 or 4)
-(setq-default c-basic-offset 4)
-(setq-default tab-width 4)
+;; Dassault Style, 3 spaces, left brace under function and allied left
+(c-add-style "dassault"
+	     '("user"
+	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
+	       (c-basic-offset . 3)            ; indent by four spaces
+	       (c-offsets-alist . ((inline-open . 0)  ; custom indentation rules
+				   (brace-list-open . 0)
+				   (statement-case-open . +)))))
+
+
+(defun my-c++-mode-hook ()
+  (c-set-style "dassault")
+  (auto-fill-mode) 
+  (c-toggle-auto-hungry-state 1))
+
+(add-hook 'c++-mode-hook 'my-c++-mode-hook)
 ;; small interface tweaks
 (setq inhibit-startup-message t)
 ;;disable tool bar
@@ -585,7 +595,7 @@
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; inline syntax checking
+;;inline syntax checking
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package flycheck
   :ensure t
@@ -604,5 +614,5 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flymake-python-pyflakes flycheck auto-complete which-key counsel powerline spacemacs-theme autopair undo-tree beacon rainbow-delimiters swiper diminish idle-highlight-mode expand-region sr-speedbar auto-package-update use-package))))
+    (flycheck-pyflakes flymake-python-pyflakes flycheck auto-complete which-key counsel powerline spacemacs-theme autopair undo-tree beacon rainbow-delimiters swiper diminish idle-highlight-mode expand-region sr-speedbar auto-package-update use-package))))
 

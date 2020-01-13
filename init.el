@@ -136,18 +136,18 @@
 (tool-bar-mode -1)
 ;; Dassault Style, 3 spaces, left brace under function and allied left
 (c-add-style "dassault"
-	     '("user"
+	     '("bsd"
 	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
-	       (c-basic-offset . 3)            ; indent by four spaces
-	       (c-offsets-alist . ((inline-open . 0)  ; custom indentation rules
-				   (brace-list-open . 0)
-				   (statement-case-open . +)))))
+	       (c-basic-offset . 3)))
 
+;; Dassault Style, 3 spaces, left brace under function and allied left
+(c-add-style "four-spaces"
+	     '("bsd"
+	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
+	       (c-basic-offset . 4)))
 
 (defun my-c++-mode-hook ()
-  (c-set-style "dassault")
-  (auto-fill-mode) 
-  (c-toggle-auto-hungry-state 1))
+  (c-set-style "dassault"))
 
 (add-hook 'c++-mode-hook 'my-c++-mode-hook)
 ;; small interface tweaks
@@ -176,6 +176,8 @@
 ;; Global Keyboard Shortcuts
 ;;show whitespace
 (global-set-key (kbd "<f10>") 'whitespace-mode)
+;; Load the compile ocmmand
+(global-set-key (kbd "<f9>") 'compile)
 ;; speedbar
 (global-set-key (kbd "<f8>") 'sr-speedbar-toggle)
 ;; Set help to C-?
@@ -190,8 +192,6 @@
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
 ;; Indent after a newline, if required by syntax of language
 (global-set-key (kbd "C-m") 'newline-and-indent)
-;; Load the compile ocmmand
-(global-set-key (kbd "<f9>") 'compile)
 ;;exand region
 (global-set-key (kbd "C-=") 'er/expand-region)
 ;;mouse keys

@@ -116,9 +116,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tweaks
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;turn flycheck on
-(setq flycheck-on 1)
-;; turn on highlight matching brackets when cursor is on one
 (show-paren-mode t)
 ;; Overwrite region selected
 (delete-selection-mode t)
@@ -134,8 +131,6 @@
               search-highlight t) ;hilit matches when searching
 ;; Highlight the line we are currently on
 (global-hl-line-mode t)
-;; Disable the toolbar at the top since it's useless
-(tool-bar-mode -1)
 ;; Dassault Style, 3 spaces, left brace under function and allied left
 (c-add-style "dassault"
 	     '("bsd"
@@ -154,8 +149,12 @@
 (add-hook 'c++-mode-hook 'my-c++-mode-hook)
 ;; small interface tweaks
 (setq inhibit-startup-message t)
+;;no line wrapping
+(set-default 'truncate-lines t)
 ;;disable tool bar
 (tool-bar-mode -1)
+;;disable menu bar
+(menu-bar-mode -1)
 ;; I don't care to see the splash screen
 (setq inhibit-splash-screen t)
 ;; Hide the scroll bar
@@ -163,8 +162,10 @@
 ;; Set default window size and position
 (setq default-frame-alist
       '((top . 0) (left . 0) ;; position
-        (width . 110) (height . 45) ;; size
+        (width . 100) (height . 38) ;; size
         ))
+;;cursor never stop blinking
+(setq blink-cursor-blinks 0)
 ;; Enable line numbers on the LHS
 (global-linum-mode 1)
 ;; Don't ring the bell
@@ -182,6 +183,10 @@
 (global-set-key (kbd "<f9>") 'compile)
 ;; speedbar
 (global-set-key (kbd "<f8>") 'sr-speedbar-toggle)
+;;refresh
+;;(global-set-key (kbd "<f11>") 'find-alternate-file)
+;;copy file path of current buffer to clip board
+(global-set-key (kbd "C-c C-/") 'er-copy-file-name-to-clipboard)
 ;; Set help to C-?
 (global-set-key (kbd "C-?") 'help-command)
 ;; Set mark paragraph to M-?
@@ -200,6 +205,9 @@
 (global-set-key (kbd "<mouse-4>") 'next-buffer)
 (global-set-key (kbd "<mouse-5>") 'previous-buffer)
 (setq mouse-wheel-tilt-scroll 1)
+;;save cursor position
+(save-place-mode 1)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance
@@ -209,11 +217,12 @@
 ;; the font color under Menu Bar->Options->Appearance->Font For...
 ;; and then setting "Adopt Face and Frame Parameter as Frame Default"
 
-(use-package spacemacs-common
-  :ensure spacemacs-theme
-  :config (load-theme 'spacemacs-dark t))
+(use-package zenburn-theme
+  :ensure t
+  :config
+  (load-theme 'zenburn t))
 
-;;(set-face-background 'hl-line "#372E2D")
+(set-face-background 'hl-line "#4a4241")
 ;; The minibuffer default colors with my theme are impossible to read,
 ;; so change them to something better using ivy-minibuffer-match-face.
 
@@ -241,8 +250,8 @@
  '(ivy-minibuffer-match-face-4 ((t (:background "#680a0a" :weight bold))))
  '(which-func ((t (:foreground "#8fb28f")))))
 
-
-
+;;highlighted text
+(set-face-attribute 'region nil :weight 'bold :underline t)
 
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
@@ -256,7 +265,7 @@
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq scroll-step 1) ;; keyboard scroll one line at a time
-(setq scroll-margin 5
+(setq scroll-margin 3
       scroll-step 1
       scroll-conservatively 10000
       scroll-preserve-screen-position 1)
@@ -338,74 +347,6 @@
                          "[%b]"))))))
 ;; Call the header line update
 (add-hook 'buffer-list-update-hook 'sl/display-header)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Powerline theme
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; powerline theme where the modes are on the right side.
-(use-package powerline
-  :ensure t
-  :config
-  (defun powerline-right-theme ()
-    "Setup a mode-line with major and minor modes on the right side."
-    (interactive)
-    (setq-default
-     mode-line-format
-     '("%e"
-       (:eval
-        (let* ((active (powerline-selected-window-active))
-               (mode-line-buffer-id
-                (if active 'mode-line-buffer-id 'mode-line-buffer-id-inactive))
-               (mode-line (if active 'mode-line 'mode-line-inactive))
-               (face0 (if active 'powerline-active0 'powerline-inactive0))
-               (face1 (if active 'powerline-active1 'powerline-inactive1))
-               (face2 (if active 'powerline-active2 'powerline-inactive2))
-               (separator-left
-                (intern (format "powerline-%s-%s"
-                                (powerline-current-separator)
-                                (car powerline-default-separator-dir))))
-               (separator-right
-                (intern (format "powerline-%s-%s"
-                                (powerline-current-separator)
-                                (cdr powerline-default-separator-dir))))
-               (lhs (list (powerline-raw "%*" face0 'l)
-                          (powerline-buffer-size face0 'l)
-                          (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
-                          (powerline-raw " ")
-                          (funcall separator-left face0 face1)
-                          (powerline-narrow face1 'l)
-                          (powerline-vc face1)))
-               (center (list (powerline-raw global-mode-string face1 'r)
-                             (powerline-raw "%4l" face1 'r)
-                             (powerline-raw ":" face1)
-                             (powerline-raw "%3c" face1 'r)
-                             (funcall separator-right face1 face0)
-                             (powerline-raw " ")
-                             (powerline-raw "%6p" face0 'r)
-                             (powerline-hud face2 face1)
-                             ))
-               (rhs (list (powerline-raw " " face1)
-                          (funcall separator-left face1 face2)
-                          (when (and (boundp 'erc-track-minor-mode)
-                                     erc-track-minor-mode)
-                            (powerline-raw erc-modified-channels-object
-                                           face2 'l))
-                          (powerline-major-mode face2 'l)
-                          (powerline-process face2)
-                          (powerline-raw " :" face2)
-                          (powerline-minor-modes face2 'l)
-                          (powerline-raw " " face2)
-                          (funcall separator-right face2 face1)
-                          ))
-               )
-          (concat (powerline-render lhs)
-                  (powerline-fill-center
-                   face1 (/ (powerline-width center) 2.0))
-                  (powerline-render center)
-                  (powerline-fill face1 (powerline-width rhs))
-                  (powerline-render rhs)))))))
-  (powerline-right-theme)
-  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ivy config
@@ -495,14 +436,6 @@
     (ac-config-default)
     (global-auto-complete-mode t)
     ))
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; xml mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'auto-mode-alist '("\\.xsd\\'" . xml-mode))
-(add-to-list 'auto-mode-alist '("\\.xslt\\'" . xml-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sr speedbar
@@ -599,11 +532,108 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;inline syntax checking
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if flycheck-on
-(use-package flycheck
-  :ensure t
-  :init
-  (global-flycheck-mode t)))
+;; (if flycheck-on
+;; (use-package flycheck
+;;   :ensure t
+;;   :init
+;;   (global-flycheck-mode t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;grab file path from butter
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun er-copy-file-name-to-clipboard ()
+  "Copy the current buffer file name to the clipboard."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name '%s' to the clipboard." filename))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;html settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+   (add-hook 'html-mode-hook
+        (lambda ()
+          ;; Default indentation is usually 2 spaces, changing to 4.
+          (set (make-local-variable 'sgml-basic-offset) 4)
+	  (setq-default indent-tabs-mode nil)))
+(add-to-list 'auto-mode-alist '("\\.xsd\\'" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.xslt\\'" . xml-mode))
+;;(add-to-list 'auto-mode-alist '("\\.css$" . html-mode))
+(add-to-list 'auto-mode-alist '("\\.cfm$" . html-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;python executable for flycheck
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;(setq flycheck-python-pycompile-executable "C:\\Windows\\python.exe")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; newhtml boilerplate
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun newhtml ()
+  "Insert a template for an empty HTML page."
+  (interactive)
+  (insert "<!DOCTYPE html>\n"
+	  "<!--John M Toniolo-->\n"
+          "<html lang=\"en\">\n"
+          "<head>\n"
+          "    <title></title>\n"
+	  "    <meta charset=\"utf-8\">\n"
+	  "    <link rel=\"stylesheet\" href=\"stylesheet.css\">\n"
+          "</head>\n"
+	  "<body>\n"
+	  "    <header>\n"
+	  "        <h1></h1>\n"
+	  "    </header>\n"
+	  "    <nav>\n"
+	  "    </nav>\n"
+          "    <main>\n"
+          "        <h2></h2>\n"
+          "        <p></p>\n"
+          "    </main>\n"
+	  "    <footer>\n"
+          "        <small></small>\n"
+          "    </footer>\n"
+	  "</body>\n"
+          "</html>\n")
+  (forward-line -11)
+  (forward-char 7)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; newpython boilerplate
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun newpython ()
+  "Insert a template for an empty Python script."
+  (interactive)
+  (insert "#John M Toniolo\n"
+          "\n"
+          "\n"
+          "\n"
+          "if __name__ == '__main__':\n"
+          "\n"
+          )
+  (forward-line -4)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; newcpp
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun newcpp ()
+  "New cpp file creation."
+  (interactive)
+  (insert "//John M Toniolo\n"
+	  "#include <iostream>\n"
+          "int main(){\n"
+          "\n"
+          "    return 0;\n"
+          "}\n"
+          "\n"
+          )
+  (forward-line -4)
+  )
 
 (provide 'init)
 

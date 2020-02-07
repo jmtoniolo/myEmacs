@@ -131,20 +131,39 @@
               search-highlight t) ;hilit matches when searching
 ;; Highlight the line we are currently on
 (global-hl-line-mode t)
+;; Dassault Style, 2 spaces, left brace under function and allied left
+(c-add-style "DassaultTwo"
+	     '("bsd"
+	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
+	       (c-basic-offset . 2)))
+
+
 ;; Dassault Style, 3 spaces, left brace under function and allied left
-(c-add-style "dassault"
+(c-add-style "DassaultThree"
 	     '("bsd"
 	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
 	       (c-basic-offset . 3)))
 
-;; Dassault Style, 3 spaces, left brace under function and allied left
-(c-add-style "four-spaces"
+;; Dassault Style, 4 spaces, left brace under function and allied left
+(c-add-style "DassaultFour"
 	     '("bsd"
 	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
 	       (c-basic-offset . 4)))
 
+;; My Style, 3 spaces, left brace after function.
+(c-add-style "JMT"
+	     '("k&r"
+	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
+	       (c-basic-offset . 3)))
+
+;; My Style, 3 spaces, left brace after function.
+(c-add-style "DassaultTab"
+	     '("bsd"
+	       (indent-tabs-mode . t)        ; use spaces rather than tabs
+	       (tab-width . 4)))
+
 (defun my-c++-mode-hook ()
-  (c-set-style "dassault"))
+  (c-set-style "DassaultTwo"))
 
 (add-hook 'c++-mode-hook 'my-c++-mode-hook)
 ;; small interface tweaks
@@ -221,7 +240,6 @@
   :ensure t
   :config
   (load-theme 'zenburn t))
-
 (set-face-background 'hl-line "#4a4241")
 ;; The minibuffer default colors with my theme are impossible to read,
 ;; so change them to something better using ivy-minibuffer-match-face.
@@ -648,4 +666,3 @@
  '(package-selected-packages
    (quote
     (powershell flycheck-pyflakes flymake-python-pyflakes flycheck auto-complete which-key counsel powerline spacemacs-theme autopair undo-tree beacon rainbow-delimiters swiper diminish idle-highlight-mode expand-region sr-speedbar auto-package-update use-package))))
-

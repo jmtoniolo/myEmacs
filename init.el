@@ -3,6 +3,7 @@
 ;; Emacs 25.1 and newer tested
 ;;; Code:
 ;; set up package sources
+
 (setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")
                          ("gnu" . "http://elpa.gnu.org/packages/")))
@@ -16,6 +17,7 @@
 ;; and to nil for byte-compiled .emacs.elc
 (eval-and-compile
   (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
+
 ;; Add the macro generated list of package.el loadpaths to load-path.
 (mapc #'(lambda (add) (add-to-list 'load-path add))
       (eval-when-compile
@@ -159,11 +161,11 @@
 ;; My Style, 3 spaces, left brace after function.
 (c-add-style "DassaultTab"
 	     '("bsd"
-	       (indent-tabs-mode . t)        ; use spaces rather than tabs
+	       (indent-tabs-mode . t)        ; use tabs
 	       (tab-width . 4)))
 
 (defun my-c++-mode-hook ()
-  (c-set-style "DassaultTwo"))
+  (c-set-style "JMT"))
 
 (add-hook 'c++-mode-hook 'my-c++-mode-hook)
 ;; small interface tweaks
@@ -216,6 +218,8 @@
 (global-set-key (kbd "C-/") 'undo)
 ;; Comment or uncomment the region
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
+;;open containing folder
+(global-set-key (kbd "C-c C-f") 'browse-file-directory)
 ;; Indent after a newline, if required by syntax of language
 (global-set-key (kbd "C-m") 'newline-and-indent)
 ;;exand region
@@ -294,6 +298,62 @@
 ;; Enable which function mode and set the header line to display both the
 ;; path and the function we're in
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq-default mode-line-format
+	      (list
+	       ;; is this buffer read-only?
+	       "  "
+    '(:eval (if buffer-read-only
+              (concat  (propertize "&"
+                             'face 'font-lock-warning-face
+                             'help-echo "Buffer is read-only"))
+    	      (concat  (propertize "-"
+                             'face 'font-lock-string-face
+                             'help-echo "Buffer is read-write"))))
+    
+    ;; was this buffer modified since the last save?
+    '(:eval (if (buffer-modified-p)
+              (concat  (propertize "&"
+                             'face 'font-lock-warning-face
+                             'help-echo "Buffer has been modified"))
+	      (concat  (propertize "-"
+                             'face 'font-lock-string-face
+                             'help-echo "Buffer unmodified"))))
+    " "
+
+    ;; the buffer name; the file name as a tool tip
+    '(:eval (propertize "%b " 'face 'font-lock-keyword-face
+			'help-echo (buffer-file-name)))
+
+    ;;which function
+    "["
+    'which-func-current     
+    "] "
+    ;; line and column
+     ;; '%02' to set to 2 chars at least; prevents flickering
+      (propertize "%02l" 'face 'font-lock-type-face) ","
+      (propertize "%02c" 'face 'font-lock-type-face) ","
+      (propertize "%p" 'face 'font-lock-type-face) ;; % above top
+    " "
+
+
+    ;; the current major mode for the buffer.
+    "["
+
+    '(:eval (propertize "%m" 'face 'font-lock-string-face
+              'help-echo buffer-file-coding-system))
+    "] "
+
+    ;; add the time, with the date and the emacs uptime in the tooltip
+    '(:eval (propertize (format-time-string "%H:%M")
+              'help-echo
+              (concat (format-time-string "%c; ")
+                      (emacs-uptime "Uptime:%hh"))))
+
+    ;; i don't want to see minor-modes; but if you want, uncomment this:
+    ;; minor-mode-alist  ;; list of minor modes
+
+    
+    ))
 (which-function-mode t)
 
 (defmacro with-face (str &rest properties)
@@ -304,7 +364,7 @@
   "."
   (let* ((sl/full-header (abbreviate-file-name buffer-file-name))
          (sl/header (file-name-directory sl/full-header))
-         (sl/drop-str "[...]")
+         (sl/drop-str "[~]")
          )
     (if (> (length sl/full-header)
            (window-body-width))
@@ -314,6 +374,8 @@
               (concat (with-face sl/drop-str
                                  :background "blue"
                                  :weight 'bold
+				 
+
                                  )
                       (with-face (substring sl/header
                                             (+ (- (length sl/header)
@@ -321,25 +383,28 @@
                                                (length sl/drop-str))
                                             (length sl/header))
                                  ;; :background "red"
-                                 :weight 'bold
+                                 :weight 'bold				 
                                  )))
           (concat
            (with-face sl/header
                       ;; :background "red"
                       :foreground "red"
-                      :weight 'bold)))
+                      :weight 'bold
+		      )))
       (concat (if window-system ;; In the terminal the green is hard to read
                   (with-face sl/header
                              ;; :background "green"
                              ;; :foreground "black"
                              :weight 'bold
                              :foreground "#8fb28f"
+			     
                              )
                 (with-face sl/header
                            ;; :background "green"
                            ;; :foreground "black"
                            :weight 'bold
                            :foreground "blue"
+			   
                            ))
               (with-face (file-name-nondirectory buffer-file-name)
                          :weight 'bold
@@ -357,8 +422,8 @@
      '(which-func ((t (:foreground "blue"))))))
   ;; Set the header line
   (setq header-line-format
-        (list "-"
-              '(which-func-mode ("" which-func-format))
+        (list ;;"-"
+              ;;'(which-func-mode ("" which-func-format))
               '("" ;; invocation-name
                 (:eval (if (buffer-file-name)
                            (concat "[" (sl/make-header) "]")
@@ -430,9 +495,14 @@
 ;;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ;;packages and functionality
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; debugger
+;; Open file's containing folder
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;(setq gdb-many-windows 1)
+(defun browse-file-directory ()
+  "Open the current file's directory however the OS would."
+  (interactive)
+  (if default-directory
+      (browse-url-of-file (expand-file-name default-directory))
+    (error "No `default-directory' to open")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; key binding guide
@@ -441,8 +511,6 @@
   :ensure t
   :config
   (which-key-mode))
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; simple autocomplete
@@ -455,11 +523,6 @@
     (global-auto-complete-mode t)
     ))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; sr speedbar
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package sr-speedbar
-  :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; expand region
@@ -474,35 +537,9 @@
   :ensure t)
 (add-hook 'prog-mode-hook (lambda () (idle-highlight-mode t)))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Use undo-tree to navigate undo history
+;; better search
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package undo-tree
-  :ensure t
-  :diminish undo-tree-mode
-  ;;:defer 1
-  :config
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function global-undo-tree-mode "undo-tree.el"))
-  (global-undo-tree-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; diminish - Hide the minor modes in the mode line for more room
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package diminish
-  :ensure t
-  :init
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function diminish "diminish.el"))
-  :config
-  (diminish 'abbrev-mode)
-  (diminish 'eldoc-mode)
-  (diminish 'auto-revert-mode)
-  )
-
 (use-package swiper
   :ensure t
   )
@@ -548,15 +585,6 @@
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;inline syntax checking
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (if flycheck-on
-;; (use-package flycheck
-;;   :ensure t
-;;   :init
-;;   (global-flycheck-mode t)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;grab file path from butter
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun er-copy-file-name-to-clipboard ()
@@ -567,7 +595,7 @@
                     (buffer-file-name))))
     (when filename
       (kill-new filename)
-      (message "Copied buffer file name '%s' to the clipboard." filename))))
+      (message "buffer path '%s'" filename))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;html settings
@@ -586,6 +614,17 @@
 ;;python executable for flycheck
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;(setq flycheck-python-pycompile-executable "C:\\Windows\\python.exe")
+;; (use-package rich-minority
+;;   :ensure t
+;;   :init
+;;   (eval-when-compile
+;;     ;; Silence missing function warnings
+;;     (declare-function autopair-global-mode "autopair.el"))
+;;   :config
+;;   (rich-minority-mode t)
+;;   (setf rm-blacklist "")
+;;   )
+;; use setq-default to set it for /all/ modes
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; newhtml boilerplate
@@ -665,4 +704,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (powershell flycheck-pyflakes flymake-python-pyflakes flycheck auto-complete which-key counsel powerline spacemacs-theme autopair undo-tree beacon rainbow-delimiters swiper diminish idle-highlight-mode expand-region sr-speedbar auto-package-update use-package))))
+    (hide-mode-line powershell flycheck-pyflakes flymake-python-pyflakes flycheck auto-complete which-key counsel powerline spacemacs-theme autopair undo-tree beacon rainbow-delimiters swiper diminish idle-highlight-mode expand-region sr-speedbar auto-package-update use-package))))

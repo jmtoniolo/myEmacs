@@ -182,7 +182,7 @@
 (scroll-bar-mode -1)
 ;; Set default window size and position
 (setq default-frame-alist
-      '((top . 0) (left . 0) ;; position
+      '(;;(top . 0) (left . 0) ;; position
         (width . 100) (height . 38) ;; size
         ))
 ;;cursor never stop blinking
@@ -301,9 +301,9 @@
 (setq-default mode-line-format
 	      (list
 	       ;; is this buffer read-only?
-	       "  "
+	       " "
     '(:eval (if buffer-read-only
-              (concat  (propertize "&"
+              (concat  (propertize "%%"
                              'face 'font-lock-warning-face
                              'help-echo "Buffer is read-only"))
     	      (concat  (propertize "-"
@@ -312,12 +312,12 @@
     
     ;; was this buffer modified since the last save?
     '(:eval (if (buffer-modified-p)
-              (concat  (propertize "&"
+              (concat  (propertize "*"
                              'face 'font-lock-warning-face
                              'help-echo "Buffer has been modified"))
 	      (concat  (propertize "-"
                              'face 'font-lock-string-face
-                             'help-echo "Buffer unmodified"))))
+                             'help-echo "No unsaved changes"))))
     " "
 
     ;; the buffer name; the file name as a tool tip
@@ -326,7 +326,7 @@
 
     ;;which function
     "["
-    'which-func-current     
+    'which-func-current
     "] "
     ;; line and column
      ;; '%02' to set to 2 chars at least; prevents flickering
@@ -388,7 +388,7 @@
           (concat
            (with-face sl/header
                       ;; :background "red"
-                      :foreground "red"
+                      ;; :foreground "red"
                       :weight 'bold
 		      )))
       (concat (if window-system ;; In the terminal the green is hard to read
@@ -694,8 +694,6 @@
 
 (provide 'init)
 
-(defun display-startup-echo-area-message ()
-  (message "Ready"))
 ;;; init.el ends here
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

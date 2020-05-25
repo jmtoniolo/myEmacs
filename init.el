@@ -71,7 +71,7 @@
 ;;cursor never stop blinking
 (setq blink-cursor-blinks 0)
 ;; Enable line numbers on the LHS
-(global-linum-mode 1)
+(global-linum-mode 0)
 ;; Don't ring the bell
 (setq ring-bell-function 'ignore)
 ;;y/n instead of yes/no
@@ -82,7 +82,7 @@
 (setq compile-command "g++ -std=c++14 ")
 ;; Global Keyboard Shortcuts
 ;; Load the compile ocmmand
-(global-set-key (kbd "<f9>") 'compile)
+(global-set-key (kbd "<f9>") 'treemacs)
 ;;show whitespace
 (global-set-key (kbd "<f10>") 'whitespace-mode)
 ;;minimap toggle
@@ -105,6 +105,8 @@
 (global-set-key (kbd "C-m") 'newline-and-indent)
 ;;exand region
 (global-set-key (kbd "C-=") 'er/expand-region)
+;;better search
+(global-set-key (kbd "C-s") 'swiper)
 ;;mouse keys
 (global-set-key (kbd "<mouse-4>") 'next-buffer)
 (global-set-key (kbd "<mouse-5>") 'previous-buffer)
@@ -309,6 +311,12 @@
 (use-package minimap
   :ensure t)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;treemacs <3
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package treemacs
+  :ensure t)
+
 ;;===================================================================
 ;; keep emacs demon running for fast startups
 ;;===================================================================
@@ -382,6 +390,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(minimap-recenter-type (quote middle))
+ '(minimap-window-location (quote right))
  '(package-selected-packages
    (quote
-    (minimap crux diminish autopair beacon rainbow-delimiters swiper idle-highlight-mode expand-region auto-complete which-key use-package))))
+    (treemacs minimap crux diminish autopair beacon rainbow-delimiters swiper idle-highlight-mode expand-region auto-complete which-key use-package))))

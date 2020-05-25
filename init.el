@@ -22,11 +22,16 @@
 ;;                                ;; restore after startup
 ;;                                (setq gc-cons-threshold 800000)))
 
+
 ;;===================================================================
 ;; tweaks and minor settings
 ;;===================================================================
 ;;theme
 (load-theme 'misterioso)
+; Set cursor color to white
+(set-cursor-color "#ffffff")
+;;highlight color
+(set-face-attribute 'region nil :background "#338F86")
 ;;highlight mathing parenthisis
 (show-paren-mode t)
 ;; Overwrite region selected
@@ -42,7 +47,9 @@
 (setq-default case-fold-search t ;case insensitive searches by default
               search-highlight t) ;hilit matches when searching
 ;; Highlight the line we are currently on
-;;(global-hl-line-mode t)
+(global-hl-line-mode t)
+;;line highlight color
+(set-face-background 'hl-line "#2D4948")
 (add-hook 'c++-mode-hook 'my-c++-mode-hook)
 ;; small interface tweaks
 (setq inhibit-startup-message t)
@@ -107,10 +114,8 @@
 ;;keep buffer up to date if file changes outside emacs
 (global-auto-revert-mode t)
 ;;title bar shows full path
-(setq frame-title-format
-      '((:eval (if (buffer-file-name)
-       (abbreviate-file-name (buffer-file-name))
-       "%b"))))
+(setq-default frame-title-format '("%b"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Smooth out the scrolling
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -310,6 +315,59 @@
 (require 'server)
 (if (not (server-running-p)) (server-start))
 
+;;===================================================================
+;; header line
+;;===================================================================
+(defun with-face (str &rest face-plist)
+  (propertize str 'face face-plist))
+
+(defun sl/make-header ()
+  ""
+  (let* ((sl/full-header (abbreviate-file-name buffer-file-name))
+         (sl/header (file-name-directory sl/full-header))
+         (sl/drop-str "[...]"))
+    (if (> (length sl/full-header)
+           (window-body-width))
+        (if (> (length sl/header)
+               (window-body-width))
+            (progn
+              (concat (with-face sl/drop-str
+                                 :background "blue"
+                                 :weight 'bold
+                                 )
+                      (with-face (substring sl/header
+                                            (+ (- (length sl/header)
+                                                  (window-body-width))
+                                               (length sl/drop-str))
+                                            (length sl/header))
+                                 ;; :background "red"
+                                 :weight 'bold
+                                 )))
+          (concat (with-face sl/header
+                             ;; :background "red"
+                             :foreground "#2D3743"
+                             :weight 'bold
+                             )))
+      (concat (with-face sl/header
+                         ;; :background "green"
+                         ;; :foreground "black"
+                         :weight 'bold
+                         :foreground "#2D3743"
+                         )
+              (with-face (file-name-nondirectory buffer-file-name)
+                         :weight 'bold
+                         ;; :background "red"
+                         )))))
+
+(defun sl/display-header ()
+  (setq header-line-format
+        '("" ;; invocation-name
+          (:eval (if (buffer-file-name)
+                     (sl/make-header)
+                   "%b")))))
+
+(add-hook 'buffer-list-update-hook
+          'sl/display-header)
 
 ;;END=========================================================================================
 (custom-set-faces

@@ -78,6 +78,8 @@
 (global-set-key (kbd "<f9>") 'compile)
 ;;show whitespace
 (global-set-key (kbd "<f10>") 'whitespace-mode)
+;;minimap toggle
+(global-set-key (kbd "<f12>") 'minimap-mode)
 ;;copy file path of current buffer to clip board
 (global-set-key (kbd "C-c C-/") 'er-copy-file-name-to-clipboard)
 ;; Set help to C-?
@@ -301,8 +303,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package minimap
   :ensure t)
-(custom-set-faces
- '(minimap-active-region-background ((((background dark)) (:background "#3f4f57" :extend t)) (t (:background "#C847D8FEFFFF" :extend t)))))
 
 ;;===================================================================
 ;; keep emacs demon running for fast startups
@@ -312,3 +312,17 @@
 
 
 ;;END=========================================================================================
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(minimap-active-region-background ((((background dark)) (:background "#3f4f57" :extend t)) (t (:background "#C847D8FEFFFF" :extend t)))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (minimap crux diminish autopair beacon rainbow-delimiters swiper idle-highlight-mode expand-region auto-complete which-key use-package))))

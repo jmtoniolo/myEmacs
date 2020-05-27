@@ -4,6 +4,7 @@
 ;; package managers
 ;;===================================================================
 (require 'package)
+
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
@@ -18,9 +19,6 @@
 
 ;;garbage collection setting
 (setq gc-cons-threshold 64000000)
-;; (add-hook 'after-init-hook #'(lambda ()
-;;                                ;; restore after startup
-;;                                (setq gc-cons-threshold 800000)))
 
 
 ;;===================================================================
@@ -29,7 +27,11 @@
 ;;theme
 (load-theme 'misterioso)
 ; Set cursor color to white
-(set-cursor-color "#ffffff")
+(set-cursor-color "#ff88ff") ;;pinkish
+;;tab modes nil
+(setq-default indent-tabs-mode nil)
+;;# of spaces for tab
+(setq-default tab-width 2)
 ;;highlight color
 (set-face-attribute 'region nil :background "#338F86")
 ;;highlight mathing parenthisis
@@ -38,19 +40,15 @@
 (delete-selection-mode t)
 ;; Show column numbers by default
 (setq column-number-mode t)
-;; Use CUA to delete selections
-(setq cua-mode t)
-;;(setq cua-enable-cua-keys nil)
-;; Prevent emacs from creating a bckup file filename~
+;; Prevent emacs from creating a backup file like: filename~
 (setq make-backup-files nil)
 ;; Settings for searching
 (setq-default case-fold-search t ;case insensitive searches by default
-              search-highlight t) ;hilit matches when searching
+              search-highlight t) ;hilight matches when searching
 ;; Highlight the line we are currently on
 (global-hl-line-mode t)
 ;;line highlight color
 (set-face-background 'hl-line "#2D4948")
-(add-hook 'c++-mode-hook 'my-c++-mode-hook)
 ;; small interface tweaks
 (setq inhibit-startup-message t)
 ;;no line wrapping
@@ -71,7 +69,7 @@
 ;;cursor never stop blinking
 (setq blink-cursor-blinks 0)
 ;; Enable line numbers on the LHS
-(global-linum-mode 0)
+(global-display-line-numbers-mode 0)
 ;; Don't ring the bell
 (setq ring-bell-function 'ignore)
 ;;y/n instead of yes/no
@@ -80,48 +78,40 @@
 (setq auto-save-default nil)
 ;; Compilation command for C/C++
 (setq compile-command "g++ -std=c++14 ")
-;; Global Keyboard Shortcuts
-;; Load the compile ocmmand
-(global-set-key (kbd "<f9>") 'treemacs)
+;;;; Global Keyboard Shortcuts ;;;;;;;;;;;;;;;;;;;
+;; Show whitespace
+(global-set-key (kbd "<f9>") 'whitespace-mode)
 ;;show whitespace
-(global-set-key (kbd "<f10>") 'whitespace-mode)
+(global-set-key (kbd "<f10>") 'treemacs)
 ;;minimap toggle
 (global-set-key (kbd "<f12>") 'minimap-mode)
 ;;copy file path of current buffer to clip board
 (global-set-key (kbd "C-c C-/") 'er-copy-file-name-to-clipboard)
-;; Set help to C-?
-(global-set-key (kbd "C-?") 'help-command)
-;; Set mark paragraph to M-?
-(global-set-key (kbd "M-?") 'mark-paragraph)
-;; Use meta+tab word completion
-(global-set-key (kbd "M-TAB") 'dabbrev-expand)
 ;; Easy undo key
 (global-set-key (kbd "C-/") 'undo)
 ;; Comment or uncomment the region
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
 ;;open containing folder
 (global-set-key (kbd "C-c C-f") 'browse-file-directory)
-;; Indent after a newline, if required by syntax of language
-(global-set-key (kbd "C-m") 'newline-and-indent)
 ;;exand region
-(global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "M-m") 'er/expand-region)
 ;;better search
 (global-set-key (kbd "C-s") 'swiper)
 ;;mouse keys
 (global-set-key (kbd "<mouse-4>") 'next-buffer)
 (global-set-key (kbd "<mouse-5>") 'previous-buffer)
+;;use side scroller to scroll horizontally
 (setq mouse-wheel-tilt-scroll 1)
-;;save cursor position
+;;save cursor position between sessions
 (save-place-mode 1)
 ;;keep buffer up to date if file changes outside emacs
 (global-auto-revert-mode t)
 ;;title bar shows full path
 (setq-default frame-title-format '("%b"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; Smooth out the scrolling
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; # line at a time
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq scroll-step 1) ;; keyboard scroll one line at a time
@@ -129,7 +119,6 @@
       scroll-step 1
       scroll-conservatively 10000
       scroll-preserve-screen-position 1)
-;;(setq scroll-margin )
 
 ;; Dassault Style, 2 spaces, left brace under function and allied left
 (c-add-style "DassaultTwo"
@@ -164,91 +153,41 @@
 
 (defun my-c++-mode-hook ()
   (c-set-style "JMT"))
-
+(add-hook 'c++-mode-hook 'my-c++-mode-hook)
 
 
 ;;===================================================================
 ;; packages
 ;;===================================================================
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Open file's containing folder
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun browse-file-directory ()
-  "Open the current file's directory however the OS would."
-  (interactive)
-  (if default-directory
-      (browse-url-of-file (expand-file-name default-directory))
-    (error "No `default-directory' to open")))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; key binding guide
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package which-key
   :ensure t
   :config
   (which-key-mode))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; simple autocomplete
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package auto-complete
   :ensure t
   :init
   (progn
     (ac-config-default)
-    (global-auto-complete-mode t)
-    ))
+    (global-auto-complete-mode t)))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; expand region
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package expand-region
   :ensure t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; highlight mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package idle-highlight-mode
   :ensure t)
 (add-hook 'prog-mode-hook (lambda () (idle-highlight-mode t)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; better search
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package swiper
-  :ensure t
-  )
+  :ensure t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Rainbow Delimiters -  have delimiters be colored by their depth
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package rainbow-delimiters
-  :ensure t
-  :init
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function rainbow-delimiters-mode "rainbow-delimiters.el"))
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Beacon-mode: flash the cursor when switching buffers or scrolling
-;;              the goal is to make it easy to find the cursor
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package beacon
-  :ensure t
-  :diminish beacon-mode
-  :init
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function beacon-mode "beacon.el"))
-  :config
-  (beacon-mode t))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; autopair
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Automatically at closing brace, bracket and quote
 (use-package autopair
   :ensure t
   :diminish autopair-mode
@@ -257,12 +196,47 @@
     ;; Silence missing function warnings
     (declare-function autopair-global-mode "autopair.el"))
   :config
-  (autopair-global-mode t)
-  )
+  (autopair-global-mode t))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;hide minor modes
+(use-package diminish
+  :ensure t)
+(diminish 'ivy-mode)
+(diminish 'minimap-mode)
+(diminish 'which-key-mode)
+
+;;ivy for help with M-x commands
+(use-package ivy
+  :ensure t
+  :config (ivy-mode t))
+
+;;minimap on right side
+(use-package minimap
+  :ensure t
+  :config
+          (setq minimap-recenter-type 'middle)
+          (setq minimap-window-location 'right))
+ 
+;;treemacs <3
+(use-package treemacs
+  :ensure t)
+
+;;lua mode
+(use-package lua-mode
+  :ensure t)
+
+;;===================================================================
+;; Custom Functions
+;;===================================================================
+;; Open file's containing folder
+(defun browse-file-directory ()
+  "Open the current file's directory however the OS would."
+  (interactive)
+  (if default-directory
+      (browse-url-of-file (expand-file-name default-directory))
+    (error "No `default-directory' to open")))
+
 ;;grab file path from butter
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun er-copy-file-name-to-clipboard ()
   "Copy the current buffer file name to the clipboard."
   (interactive)
@@ -273,9 +247,10 @@
       (kill-new filename)
       (message "buffer path '%s'" filename))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;===================================================================
+;; HTML Tuning
+;;===================================================================
 ;;html settings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    (add-hook 'html-mode-hook
         (lambda ()
           ;; Default indentation is usually 2 spaces, changing to 4.
@@ -286,36 +261,6 @@
 ;;(add-to-list 'auto-mode-alist '("\\.css$" . html-mode))
 (add-to-list 'auto-mode-alist '("\\.cfm$" . html-mode))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;hide minor modes
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package diminish
-	     :ensure t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;ivy for help with M-x commands
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(ivy-mode 1)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;extra keybindings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package crux
-  :ensure t
-  :bind
-  ("C-a" . crux-move-beginning-of-line))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;minimap on side
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package minimap
-  :ensure t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;treemacs <3
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package treemacs
-  :ensure t)
 
 ;;===================================================================
 ;; keep emacs demon running for fast startups
@@ -369,7 +314,7 @@
 
 (defun sl/display-header ()
   (setq header-line-format
-        '("" ;; invocation-name
+        '("  " ;; invocation-name
           (:eval (if (buffer-file-name)
                      (sl/make-header)
                    "%b")))))
@@ -378,19 +323,18 @@
           'sl/display-header)
 
 ;;END=========================================================================================
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(minimap-active-region-background ((((background dark)) (:background "#3f4f57" :extend t)) (t (:background "#C847D8FEFFFF" :extend t)))))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(minimap-recenter-type (quote middle))
- '(minimap-window-location (quote right))
  '(package-selected-packages
    (quote
-    (treemacs minimap crux diminish autopair beacon rainbow-delimiters swiper idle-highlight-mode expand-region auto-complete which-key use-package))))
+    (lua-mode treemacs minimap diminish autopair swiper idle-highlight-mode expand-region auto-complete which-key use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(minimap-active-region-background ((((background dark)) (:background "#3f4f57")) (t (:background "#C847D8FEFFFF"))) nil (quote minimap)))
+ 

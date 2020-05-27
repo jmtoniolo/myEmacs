@@ -278,7 +278,7 @@
   ""
   (let* ((sl/full-header (abbreviate-file-name buffer-file-name))
          (sl/header (file-name-directory sl/full-header))
-         (sl/drop-str "[...]"))
+         (sl/drop-str "[...]"))    
     (if (> (length sl/full-header)
            (window-body-width))
         (if (> (length sl/header)
@@ -312,12 +312,13 @@
                          ;; :background "red"
                          )))))
 
-(defun sl/display-header ()
-  (setq header-line-format
-        '("  " ;; invocation-name
-          (:eval (if (buffer-file-name)
-                     (sl/make-header)
-                   "%b")))))
+(defun sl/display-header ()  
+  (if (buffer-file-name)
+      (setq header-line-format
+            '("" ;; invocation-name
+              (:eval (if (buffer-file-name)
+                         (sl/make-header)
+                       "%b"))))))
 
 (add-hook 'buffer-list-update-hook
           'sl/display-header)

@@ -31,7 +31,7 @@
 ;;tab modes nil
 (setq-default indent-tabs-mode nil)
 ;;# of spaces for tab
-(setq-default tab-width 2)
+(setq tab-width 3)
 ;;highlight color
 (set-face-attribute 'region nil :background "#338F86")
 ;;highlight mathing parenthisis
@@ -269,6 +269,25 @@
 (if (not (server-running-p)) (server-start))
 
 ;;===================================================================
+;; custom ediff
+;;===================================================================
+(defun ds-diffp (parent)
+  (interactive "sParent path: ")
+  (setq buffersplit (split-string buffer-file-name "/"))
+  (setq relativepath "")
+  (concat parent relativepath)
+  (setq index 3)
+  (while (< index (length buffersplit))
+    (setq relativepath (concat relativepath "\\"))
+    (setq relativepath (concat relativepath (elt buffersplit index)))    
+    (setq index(1+ index))
+    )
+  (setq relativepath (concat parent relativepath))
+  
+  
+  (ediff buffer-file-name relativepath))
+;;    (ediff buffer-file-name )
+;;===================================================================
 ;; header line
 ;;===================================================================
 (defun with-face (str &rest face-plist)
@@ -337,5 +356,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ediff-even-diff-A ((t (:background "dim gray"))))
+ '(ediff-even-diff-Ancestor ((t (:background "dim gray"))))
+ '(ediff-even-diff-B ((t (:background "dim gray"))))
+ '(ediff-even-diff-C ((t (:background "dim gray"))))
+ '(ediff-odd-diff-A ((t (:background "dim gray"))))
+ '(ediff-odd-diff-Ancestor ((t (:background "dim gray"))))
+ '(ediff-odd-diff-B ((t (:background "dim gray"))))
+ '(ediff-odd-diff-C ((t (:background "dim gray"))))
  '(minimap-active-region-background ((((background dark)) (:background "#3f4f57")) (t (:background "#C847D8FEFFFF"))) nil (quote minimap)))
  

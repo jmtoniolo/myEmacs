@@ -271,14 +271,14 @@
 ;;===================================================================
 ;; custom ediff
 ;;===================================================================
-(defun ds-diffp (parent)
-  (interactive "sParent path: ")
+(defun ds-diff (parent removepath)  
   (setq buffersplit (split-string buffer-file-name "/"))
   (setq relativepath "")
   (concat parent relativepath)
-  (setq index 3)
+  (setq index removepath) ;;//<remote machine>/HOME/WRKSPS/<level>/<workspace>/ must be removed and replaced with //nas01deu/BSF/<level>
+                          ;;//1               /2   /3     /4      /5          /7
   (while (< index (length buffersplit))
-    (setq relativepath (concat relativepath "\\"))
+    (setq relativepath (concat relativepath "/"))
     (setq relativepath (concat relativepath (elt buffersplit index)))    
     (setq index(1+ index))
     )
@@ -286,7 +286,17 @@
   
   
   (ediff buffer-file-name relativepath))
-;;    (ediff buffer-file-name )
+
+(defun ds-ndiff (parent) ;;diff from network
+  (interactive "sParent path: ") ;;get parent path from user
+  (ds-diff parent 7))
+
+(defun ds-ldiff (parent) ;;from from local machine
+  (interactive "sParent path: ") ;;get parent path from user
+  (ds-diff parent 6))
+
+
+
 ;;===================================================================
 ;; header line
 ;;===================================================================
@@ -348,6 +358,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ediff-diff-options "--binary -w") ;;do not highlight whitespace differences
+ '(ediff-split-window-function (quote split-window-horizontally)) ;;this is a bug, split horizontal makes it split virtically... <face-palm-mode>
  '(package-selected-packages
    (quote
     (lua-mode treemacs minimap diminish autopair swiper idle-highlight-mode expand-region auto-complete which-key use-package))))
@@ -356,7 +368,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ediff-even-diff-A ((t (:background "dim gray"))))
+ '(ediff-even-diff-A ((t (:background "dim gray"))));;the original ediff face was unreadable with the white text from misterioso mode
  '(ediff-even-diff-Ancestor ((t (:background "dim gray"))))
  '(ediff-even-diff-B ((t (:background "dim gray"))))
  '(ediff-even-diff-C ((t (:background "dim gray"))))
@@ -364,5 +376,5 @@
  '(ediff-odd-diff-Ancestor ((t (:background "dim gray"))))
  '(ediff-odd-diff-B ((t (:background "dim gray"))))
  '(ediff-odd-diff-C ((t (:background "dim gray"))))
- '(minimap-active-region-background ((((background dark)) (:background "#3f4f57")) (t (:background "#C847D8FEFFFF"))) nil (quote minimap)))
+ '(minimap-active-region-background ((((background dark)) (:background "#3f4f57")) (t (:background "#C847D8FEFFFF"))) nil (quote minimap))) ;;original was red... what a harsh colour
  

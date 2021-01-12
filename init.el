@@ -80,6 +80,8 @@
 (setq compile-command "g++ -std=c++14 ")
 ;;;; Global Keyboard Shortcuts ;;;;;;;;;;;;;;;;;;;
 ;; Show whitespace
+(global-set-key (kbd "<f8>") 'compile)
+;; Show whitespace
 (global-set-key (kbd "<f9>") 'whitespace-mode)
 ;;show whitespace
 (global-set-key (kbd "<f10>") 'treemacs)
@@ -358,17 +360,17 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ediff-diff-options "--binary -w") ;;do not highlight whitespace differences
- '(ediff-split-window-function (quote split-window-horizontally)) ;;this is a bug, split horizontal makes it split virtically... <face-palm-mode>
+ '(ediff-diff-options "--binary -w")
+ '(ediff-split-window-function (quote split-window-horizontally))
  '(package-selected-packages
    (quote
-    (lua-mode treemacs minimap diminish autopair swiper idle-highlight-mode expand-region auto-complete which-key use-package))))
+    (csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish autopair swiper idle-highlight-mode expand-region auto-complete which-key use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ediff-even-diff-A ((t (:background "dim gray"))));;the original ediff face was unreadable with the white text from misterioso mode
+ '(ediff-even-diff-A ((t (:background "dim gray"))))
  '(ediff-even-diff-Ancestor ((t (:background "dim gray"))))
  '(ediff-even-diff-B ((t (:background "dim gray"))))
  '(ediff-even-diff-C ((t (:background "dim gray"))))
@@ -376,5 +378,7 @@
  '(ediff-odd-diff-Ancestor ((t (:background "dim gray"))))
  '(ediff-odd-diff-B ((t (:background "dim gray"))))
  '(ediff-odd-diff-C ((t (:background "dim gray"))))
- '(minimap-active-region-background ((((background dark)) (:background "#3f4f57")) (t (:background "#C847D8FEFFFF"))) nil (quote minimap))) ;;original was red... what a harsh colour
+ '(minimap-active-region-background ((((background dark)) (:background "#3f4f57")) (t (:background "#C847D8FEFFFF"))) nil (quote minimap)))
+ ;;original was red... what a harsh colour
  
+(put 'dired-find-alternate-file 'disabled nil)

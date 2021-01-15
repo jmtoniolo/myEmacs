@@ -123,20 +123,20 @@
       scroll-preserve-screen-position 1)
 
 ;; Dassault Style, 2 spaces, left brace under function and allied left
-(c-add-style "DassaultTwo"
+(c-add-style "CTwo"
 	     '("bsd"
 	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
 	       (c-basic-offset . 2)))
 
 
 ;; Dassault Style, 3 spaces, left brace under function and allied left
-(c-add-style "DassaultThree"
+(c-add-style "CThree"
 	     '("bsd"
 	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
 	       (c-basic-offset . 3)))
 
 ;; Dassault Style, 4 spaces, left brace under function and allied left
-(c-add-style "DassaultFour"
+(c-add-style "CFour"
 	     '("bsd"
 	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
 	       (c-basic-offset . 4)))
@@ -148,13 +148,13 @@
 	       (c-basic-offset . 3)))
 
 ;; My Style, 3 spaces, left brace after function.
-(c-add-style "DassaultTab"
+(c-add-style "CTab"
 	     '("bsd"
 	       (indent-tabs-mode . t)        ; use tabs
 	       (tab-width . 4)))
 
 (defun my-c++-mode-hook ()
-  (c-set-style "JMT"))
+  (c-set-style "CTwo"))
 (add-hook 'c++-mode-hook 'my-c++-mode-hook)
 
 
@@ -354,6 +354,13 @@
 (add-hook 'buffer-list-update-hook
           'sl/display-header)
 
+
+;;=========================================================================================
+;; Centauri Customization
+;;=========================================================================================
+(setq find-program "C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\find.exe")
+
+
 ;;END=========================================================================================
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -361,10 +368,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ediff-diff-options "--binary -w")
- '(ediff-split-window-function (quote split-window-horizontally))
+ '(ediff-split-window-function 'split-window-horizontally)
  '(package-selected-packages
-   (quote
-    (csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish autopair swiper idle-highlight-mode expand-region auto-complete which-key use-package))))
+   '(csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish autopair swiper idle-highlight-mode expand-region auto-complete which-key use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -378,7 +384,8 @@
  '(ediff-odd-diff-Ancestor ((t (:background "dim gray"))))
  '(ediff-odd-diff-B ((t (:background "dim gray"))))
  '(ediff-odd-diff-C ((t (:background "dim gray"))))
- '(minimap-active-region-background ((((background dark)) (:background "#3f4f57")) (t (:background "#C847D8FEFFFF"))) nil (quote minimap)))
+ '(minimap-active-region-background ((((background dark)) (:background "#3f4f57")) (t (:background "#C847D8FEFFFF"))) nil 'minimap)
+ '(which-func ((t (:foreground "alice blue")))))
  ;;original was red... what a harsh colour
  
 (put 'dired-find-alternate-file 'disabled nil)

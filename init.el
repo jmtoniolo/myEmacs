@@ -5,9 +5,6 @@
 ;;===================================================================
 (require 'package)
 
-(require 'tramp)
-(setq default-tramp-method "plink")
-(setenv "PATH" (concat "c:/Users/john.toniolo/Documents/putty/;" (getenv "PATH")))
 
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
@@ -203,15 +200,15 @@
   :ensure t)
 
 ;; autopair
-(use-package phi-autopair
+(use-package flex-autopair
   :ensure t
-  :diminish phi-autopair-mode 
+  :diminish flex-autopair-mode 
   :init
   (eval-when-compile
     ;; Silence missing function warnings
-    (declare-function phi-autopair-global-mode "phi-autopair.el"))
+    (declare-function flex-autopair-global-mode "flex-autopair.el"))
   :config
-  (phi-autopair-global-mode t))
+  (flex-autopair-mode 1))
 
 ;;hide minor modes
 (use-package diminish
@@ -239,6 +236,14 @@
 ;;lua mode
 (use-package lua-mode
   :ensure t)
+
+;;tramp for remote editing
+(use-package tramp
+  :ensure t
+  :config
+  (setq default-tramp-method "plink"))
+
+;;(setenv "PATH" (concat "c:/Users/john.toniolo/Documents/putty/;" (getenv "PATH")))
 
 ;;===================================================================
 ;; Custom Functions

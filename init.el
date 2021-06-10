@@ -5,6 +5,10 @@
 ;;===================================================================
 (require 'package)
 
+(require 'tramp)
+(setq default-tramp-method "plink")
+(setenv "PATH" (concat "c:/Users/john.toniolo/Documents/putty/;" (getenv "PATH")))
+
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
@@ -25,7 +29,9 @@
 ;; tweaks and minor settings
 ;;===================================================================
 ;;theme
-(load-theme 'misterioso)
+(load-theme 'misterioso t)
+;;font
+(set-face-attribute 'default nil :height 110)
 ; Set cursor color to white
 (set-cursor-color "#ff88ff") ;;pinkish
 ;;tab modes nil
@@ -79,8 +85,14 @@
 ;; Compilation command for C/C++
 (setq compile-command "g++ -std=c++14 ")
 ;;;; Global Keyboard Shortcuts ;;;;;;;;;;;;;;;;;;;
+;;for general purpose, assigned macros to these
+(global-set-key (kbd "<f5>") 'ffive)
+(global-set-key (kbd "<f6>") 'fsix)
+(global-set-key (kbd "<f7>") 'fseven)
+(global-set-key (kbd "<f8>") 'feight)
+
 ;; Show whitespace
-(global-set-key (kbd "<f8>") 'compile)
+;;(global-set-key (kbd "<f8>") 'compile)
 ;; Show whitespace
 (global-set-key (kbd "<f9>") 'whitespace-mode)
 ;;show whitespace
@@ -316,7 +328,7 @@
                (window-body-width))
             (progn
               (concat (with-face sl/drop-str
-                                 :background "blue"
+                                 :background "#727b9e"
                                  :weight 'bold
                                  )
                       (with-face (substring sl/header
@@ -358,8 +370,9 @@
 ;;=========================================================================================
 ;; Centauri Customization
 ;;=========================================================================================
-(setq find-program "C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\find.exe")
-
+;; (setq find-program "C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\find.exe")
+;; (grep-apply-setting 'grep-find-template "C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\find.exe <D> <X> -type f <F> -exec grep <C> -s -n -e <R> \{\} NUL \;")
+(setq ediff-diff-program "C:\\Program Files\\Git\\usr\\bin\\diff.exe")
 
 ;;END=========================================================================================
 (custom-set-variables
@@ -367,10 +380,23 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("78b4f4cf98bd74bb4efe1da37e9ddd8b72db24dcd7933685aff4a313f03428a5" default))
  '(ediff-diff-options "--binary -w")
  '(ediff-split-window-function 'split-window-horizontally)
+ '(electric-indent-mode nil)
+ '(grep-command
+   "grep --exclude-dir={.svn,Install,Build} --color=always -s -n -r ../.. -e ")
+ '(grep-find-ignored-directories
+   '("SCCS" "RCS" "CVS" "MCVS" ".src" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "Install"))
+ '(grep-find-ignored-files
+   '(".#*" "*.o" "*~" "*.bin" "*.bak" "*.obj" "*.map" "*.ico" "*.pif" "*.lnk" "*.a" "*.ln" "*.blg" "*.bbl" "*.dll" "*.drv" "*.vxd" "*.386" "*.elc" "*.lof" "*.glo" "*.idx" "*.lot" "*.fmt" "*.tfm" "*.class" "*.fas" "*.lib" "*.mem" "*.x86f" "*.sparcf" "*.dfsl" "*.pfsl" "*.d64fsl" "*.p64fsl" "*.lx64fsl" "*.lx32fsl" "*.dx64fsl" "*.dx32fsl" "*.fx64fsl" "*.fx32fsl" "*.sx64fsl" "*.sx32fsl" "*.wx64fsl" "*.wx32fsl" "*.fasl" "*.ufsl" "*.fsl" "*.dxl" "*.lo" "*.la" "*.gmo" "*.mo" "*.toc" "*.aux" "*.cp" "*.fn" "*.ky" "*.pg" "*.tp" "*.vr" "*.cps" "*.fns" "*.kys" "*.pgs" "*.tps" "*.vrs" "*.pyc" "*.pyo"))
+ '(grep-find-template
+   "/usr/bin/find <D> <X> -type f <F> -exec grep <C> -s -n -e <R> \\{\\} NUL \\;")
  '(package-selected-packages
-   '(csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish autopair swiper idle-highlight-mode expand-region auto-complete which-key use-package)))
+   '(async helm-ispell flymake-aspell highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish autopair swiper idle-highlight-mode expand-region auto-complete which-key use-package))
+ '(standard-indent 2)
+ '(whitespace-line-column 90))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -385,7 +411,12 @@
  '(ediff-odd-diff-B ((t (:background "dim gray"))))
  '(ediff-odd-diff-C ((t (:background "dim gray"))))
  '(minimap-active-region-background ((((background dark)) (:background "#3f4f57")) (t (:background "#C847D8FEFFFF"))) nil 'minimap)
- '(which-func ((t (:foreground "alice blue")))))
+ '(which-func ((t (:foreground "alice blue"))))
+ '(whitespace-empty ((t (:foreground "red" :strike-through t))))
+ '(whitespace-line ((t (:background "dark slate blue"))))
+ '(whitespace-newline ((t (:foreground "dark slate gray" :weight normal))))
+ '(whitespace-space ((t (:distant-foreground "dark slate gray" :foreground "dark slate gray"))))
+ '(whitespace-trailing ((t (:foreground "red" :strike-through t :weight bold)))))
  ;;original was red... what a harsh colour
  
 (put 'dired-find-alternate-file 'disabled nil)

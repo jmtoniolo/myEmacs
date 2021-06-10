@@ -5,11 +5,9 @@
 ;;===================================================================
 (require 'package)
 
-
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-;;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -21,7 +19,6 @@
 
 ;;garbage collection setting
 (setq gc-cons-threshold 64000000)
-
 
 ;;===================================================================
 ;; tweaks and minor settings
@@ -120,7 +117,6 @@
 (global-auto-revert-mode t)
 ;;title bar shows full path
 (setq-default frame-title-format '("%b"))
-
 
 ;; Smooth out the scrolling
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; # line at a time
@@ -242,7 +238,6 @@
   :ensure t
   :config
   (setq default-tramp-method "plink"))
-
 ;;(setenv "PATH" (concat "c:/Users/john.toniolo/Documents/putty/;" (getenv "PATH")))
 
 ;;===================================================================
@@ -280,7 +275,6 @@
 (add-to-list 'auto-mode-alist '("\\.xslt\\'" . xml-mode))
 ;;(add-to-list 'auto-mode-alist '("\\.css$" . html-mode))
 (add-to-list 'auto-mode-alist '("\\.cfm$" . html-mode))
-
 
 ;;===================================================================
 ;; keep emacs demon running for fast startups
@@ -377,7 +371,7 @@
 ;; Centauri Customization
 ;;=========================================================================================
 ;; (setq find-program "C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\find.exe")
-;; (grep-apply-setting 'grep-find-template "C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\find.exe <D> <X> -type f <F> -exec grep <C> -s -n -e <R> \{\} NUL \;")
+;; (grep-apply-setting 'grep-find-template "C:\\Program Files\\Git\\usr\\bin\\find.exe <D> <X> -type f <F> -exec grep <C> -s -n -e <R> \{\} NUL \;")
 (setq ediff-diff-program "C:\\Program Files\\Git\\usr\\bin\\diff.exe")
 
 ;;END=========================================================================================
@@ -400,7 +394,7 @@
  '(grep-find-template
    "/usr/bin/find <D> <X> -type f <F> -exec grep <C> -s -n -e <R> \\{\\} NUL \\;")
  '(package-selected-packages
-   '(phi-autopair async helm-ispell flymake-aspell highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish autopair swiper idle-highlight-mode expand-region auto-complete which-key use-package))
+   '(async highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish swiper idle-highlight-mode expand-region auto-complete which-key use-package))
  '(standard-indent 2)
  '(whitespace-line-column 90))
 (custom-set-faces

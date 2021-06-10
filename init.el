@@ -12,6 +12,7 @@
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+;;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -202,15 +203,15 @@
   :ensure t)
 
 ;; autopair
-(use-package autopair
+(use-package phi-autopair
   :ensure t
-  :diminish autopair-mode
+  :diminish phi-autopair-mode 
   :init
   (eval-when-compile
     ;; Silence missing function warnings
-    (declare-function autopair-global-mode "autopair.el"))
+    (declare-function phi-autopair-global-mode "phi-autopair.el"))
   :config
-  (autopair-global-mode t))
+  (phi-autopair-global-mode t))
 
 ;;hide minor modes
 (use-package diminish
@@ -394,7 +395,7 @@
  '(grep-find-template
    "/usr/bin/find <D> <X> -type f <F> -exec grep <C> -s -n -e <R> \\{\\} NUL \\;")
  '(package-selected-packages
-   '(async helm-ispell flymake-aspell highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish autopair swiper idle-highlight-mode expand-region auto-complete which-key use-package))
+   '(phi-autopair async helm-ispell flymake-aspell highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish autopair swiper idle-highlight-mode expand-region auto-complete which-key use-package))
  '(standard-indent 2)
  '(whitespace-line-column 90))
 (custom-set-faces

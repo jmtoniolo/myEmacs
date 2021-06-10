@@ -371,7 +371,14 @@
 ;; Centauri Customization
 ;;=========================================================================================
 ;; (setq find-program "C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\find.exe")
-;; (grep-apply-setting 'grep-find-template "C:\\Program Files\\Git\\usr\\bin\\find.exe <D> <X> -type f <F> -exec grep <C> -s -n -e <R> \{\} NUL \;")
+(defun configure-grep-win ()
+  (interactive)
+  (grep-apply-setting 'grep-find-template "\"C:\\Program Files\\Git\\usr\\bin\\find.exe\" <D> <X> -type f <F> -exec \"C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\grep.exe\" <C> -s -n -e <R> \{\} NUL \;") )
+
+(defun configure-grep-lin ()
+  (interactive)
+  (grep-apply-setting 'grep-find-template "/usr/bin/find <D> <X> -type f <F> -exec grep <C> -s -n -e <R> \\{\\} NUL \\;") )
+
 (setq ediff-diff-program "C:\\Program Files\\Git\\usr\\bin\\diff.exe")
 
 ;;END=========================================================================================
@@ -392,7 +399,7 @@
  '(grep-find-ignored-files
    '(".#*" "*.o" "*~" "*.bin" "*.bak" "*.obj" "*.map" "*.ico" "*.pif" "*.lnk" "*.a" "*.ln" "*.blg" "*.bbl" "*.dll" "*.drv" "*.vxd" "*.386" "*.elc" "*.lof" "*.glo" "*.idx" "*.lot" "*.fmt" "*.tfm" "*.class" "*.fas" "*.lib" "*.mem" "*.x86f" "*.sparcf" "*.dfsl" "*.pfsl" "*.d64fsl" "*.p64fsl" "*.lx64fsl" "*.lx32fsl" "*.dx64fsl" "*.dx32fsl" "*.fx64fsl" "*.fx32fsl" "*.sx64fsl" "*.sx32fsl" "*.wx64fsl" "*.wx32fsl" "*.fasl" "*.ufsl" "*.fsl" "*.dxl" "*.lo" "*.la" "*.gmo" "*.mo" "*.toc" "*.aux" "*.cp" "*.fn" "*.ky" "*.pg" "*.tp" "*.vr" "*.cps" "*.fns" "*.kys" "*.pgs" "*.tps" "*.vrs" "*.pyc" "*.pyo"))
  '(grep-find-template
-   "/usr/bin/find <D> <X> -type f <F> -exec grep <C> -s -n -e <R> \\{\\} NUL \\;")
+   "\"C:\\Program Files\\Git\\usr\\bin\\find.exe\" <D> <X> -type f <F> -exec \"C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\grep.exe\" <C> -s -n -e <R> \{\} NUL \;")
  '(package-selected-packages
    '(async highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish swiper idle-highlight-mode expand-region auto-complete which-key use-package))
  '(standard-indent 2)

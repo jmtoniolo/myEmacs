@@ -119,14 +119,14 @@
 (setq-default frame-title-format '("%b"))
 
 ;; Smooth out the scrolling
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; # line at a time
-(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-(setq scroll-step 1) ;; keyboard scroll one line at a time
-(setq scroll-margin 3
-      scroll-step 1
-      scroll-conservatively 10000
-      scroll-preserve-screen-position 1)
+ (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; # line at a time
+ (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+;; (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+;; (setq scroll-step 1) ;; keyboard scroll one line at a time
+;; (setq scroll-margin 3
+;;       scroll-step 1
+;;       scroll-conservatively 10000
+;;       scroll-preserve-screen-position 1)
 
 ;; Dassault Style, 2 spaces, left brace under function and allied left
 (c-add-style "CTwo"
@@ -196,15 +196,7 @@
   :ensure t)
 
 ;; autopair
-(use-package flex-autopair
-  :ensure t
-  :diminish flex-autopair-mode 
-  :init
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function flex-autopair-global-mode "flex-autopair.el"))
-  :config
-  (flex-autopair-mode 1))
+(electric-pair-mode 1)
 
 ;;hide minor modes
 (use-package diminish
@@ -408,7 +400,7 @@
  '(grep-find-template
    "\"C:\\Program Files\\Git\\usr\\bin\\find.exe\" <D> <X> -type f <F> -exec \"C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\grep.exe\" <C> -s -n -e <R> {} NUL ;")
  '(package-selected-packages
-   '(async highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish swiper idle-highlight-mode expand-region auto-complete which-key use-package))
+   '(matlab-mode async highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish swiper idle-highlight-mode expand-region auto-complete which-key use-package))
  '(standard-indent 2)
  '(whitespace-line-column 90))
 (custom-set-faces

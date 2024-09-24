@@ -18,8 +18,10 @@
   (require 'use-package))
 
 ;;garbage collection setting
-(setq gc-cons-threshold 64000000)
-
+(setq gc-cons-threshold 64000000) 
+;; (set-language-environment "UTF-8")     
+;; (set-default-coding-systems 'utf-8)
+;; (define-coding-system-alias 'UTF-8 'utf-8)
 ;;===================================================================
 ;; tweaks and minor settings
 ;;===================================================================
@@ -118,6 +120,10 @@
 ;;title bar shows full path
 (setq-default frame-title-format '("%b"))
 
+;; Org mode stuff
+(setq org-todo-keywords
+      '((sequence "TODO" "FEEDBACK" "VERIFY" "|" "DONE" "IGNORE")))
+
 ;; Smooth out the scrolling
  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; # line at a time
  (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
@@ -160,13 +166,17 @@
 	       (tab-width . 4)))
 
 (defun my-c++-mode-hook ()
-  (c-set-style "CTwo"))
+  (c-set-style "CFour"))
 (add-hook 'c++-mode-hook 'my-c++-mode-hook)
 
+(add-to-list 'auto-mode-alist '("\\.px\\'" . python-mode))
+(add-to-list 'auto-mode-alist '("\\.pyx\\'" . python-mode))
 
 ;;===================================================================
 ;; packages
 ;;===================================================================
+;; 'previous' frame to capital 'O' 
+(global-set-key (kbd "C-x O") 'previous-multiframe-window)
 
 ;; key binding guide
 (use-package which-key
@@ -229,7 +239,8 @@
 (use-package tramp
   :ensure t
   :config
-  (setq default-tramp-method "plink"))
+  (setq default-tramp-method "plink")
+  (customize-set-variable 'tramp-default-user "johton2u"))
 ;;(setenv "PATH" (concat "c:/Users/john.toniolo/Documents/putty/;" (getenv "PATH")))
 
 ;;fold the code
@@ -367,20 +378,36 @@
 
 
 ;;=========================================================================================
-;; Centauri Customization
+;; Siemens Customization
 ;;=========================================================================================
-;; (setq find-program "C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\find.exe")
-(defun configure-grep-win ()
+(defun johton2u-connect ()
   (interactive)
-  (grep-apply-setting 'grep-find-template "\"C:\\Program Files\\Git\\usr\\bin\\find.exe\" <D> <X> -type f <F> -exec \"C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\grep.exe\" <C> -s -n -e <R> \{\} NUL \;") )
+  (find-file "/plink:orw-johton2u-r8.wv.mentorg.com:/wv/johton2u") )
 
-(defun configure-grep-lin ()
+(defun icbuild-connect ()
   (interactive)
-  (grep-apply-setting 'grep-find-template "/usr/bin/find <D> <X> -type f <F> -exec grep <C> -s -n -e <R> \\{\\} NUL \\;") )
+  (find-file "/plink:icbuild@orw-johton2u-r8.wv.mentorg.com:/wv/callic") )
 
 (setq ediff-diff-program "C:\\Program Files\\Git\\usr\\bin\\diff.exe")
 
-;;END=========================================================================================
+;;=========================================================================================
+;; Centauri Customization
+;;=========================================================================================
+;; (setq find-program "C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\find.exe")
+;; (defun configure-grep-win ()
+;;   (interactive)
+;;   (grep-apply-setting 'grep-find-template "\"C:\\Program Files\\Git\\usr\\bin\\find.exe\" <D> <X> -type f <F> -exec \"C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\grep.exe\" <C> -s -n -e <R> \{\} NUL \;") )
+
+;; ;; (defun configure-grep-lin ()
+;; ;;   (interactive)
+;; ;;   (grep-apply-setting 'grep-find-template "/bin/find <D> <X> -type f <F> -exec /bin/grep <C> -s -n -e <R> \\{\\} NUL \\;") )
+;; (defun configure-grep-lin ()
+;;   (interactive)
+;;   (grep-apply-setting 'grep-find-template "/bin/find") )
+
+;; (setq ediff-diff-program "C:\\Program Files\\Git\\usr\\bin\\diff.exe")
+
+;; END=========================================================================================
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -392,16 +419,14 @@
  '(ediff-split-window-function 'split-window-horizontally)
  '(electric-indent-mode nil)
  '(grep-command
-   "grep --exclude-dir={.svn,Install,Build} --color=always -s -n -r ../.. -e ")
- '(grep-find-ignored-directories
-   '("SCCS" "RCS" "CVS" "MCVS" ".src" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "Install"))
+   "grep --exclude-dir={Isrc} --color=always -s -n -e 2>/dev/null")
  '(grep-find-ignored-files
    '(".#*" "*.o" "*~" "*.bin" "*.bak" "*.obj" "*.map" "*.ico" "*.pif" "*.lnk" "*.a" "*.ln" "*.blg" "*.bbl" "*.dll" "*.drv" "*.vxd" "*.386" "*.elc" "*.lof" "*.glo" "*.idx" "*.lot" "*.fmt" "*.tfm" "*.class" "*.fas" "*.lib" "*.mem" "*.x86f" "*.sparcf" "*.dfsl" "*.pfsl" "*.d64fsl" "*.p64fsl" "*.lx64fsl" "*.lx32fsl" "*.dx64fsl" "*.dx32fsl" "*.fx64fsl" "*.fx32fsl" "*.sx64fsl" "*.sx32fsl" "*.wx64fsl" "*.wx32fsl" "*.fasl" "*.ufsl" "*.fsl" "*.dxl" "*.lo" "*.la" "*.gmo" "*.mo" "*.toc" "*.aux" "*.cp" "*.fn" "*.ky" "*.pg" "*.tp" "*.vr" "*.cps" "*.fns" "*.kys" "*.pgs" "*.tps" "*.vrs" "*.pyc" "*.pyo"))
- '(grep-find-template
-   "\"C:\\Program Files\\Git\\usr\\bin\\find.exe\" <D> <X> -type f <F> -exec \"C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\grep.exe\" <C> -s -n -e <R> {} NUL ;")
  '(package-selected-packages
-   '(matlab-mode async highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish swiper idle-highlight-mode expand-region auto-complete which-key use-package))
+   '(magit git matlab-mode async highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish swiper idle-highlight-mode expand-region auto-complete which-key use-package))
  '(standard-indent 2)
+ '(vc-git-program "/home/gitdet/bin/git")
+ '(warning-suppress-types '((mule)))
  '(whitespace-line-column 90))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -426,3 +451,6 @@
  ;;original was red... what a harsh colour
  
 (put 'dired-find-alternate-file 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
+(find-file "c:/Users/z004ka2x/OneDrive - Siemens AG/Documents/personal/Project_Notes.org")

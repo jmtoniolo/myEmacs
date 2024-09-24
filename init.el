@@ -91,9 +91,9 @@
 ;; Show whitespace
 ;;(global-set-key (kbd "<f8>") 'compile)
 ;; Show whitespace
-(global-set-key (kbd "<f9>") 'whitespace-mode)
+(global-set-key (kbd "<f10>") 'whitespace-mode)
 ;;show whitespace
-(global-set-key (kbd "<f10>") 'treemacs)
+;; (global-set-key (kbd "<f10>") 'treemacs)
 ;;minimap toggle
 (global-set-key (kbd "<f12>") 'minimap-mode)
 ;;copy file path of current buffer to clip board

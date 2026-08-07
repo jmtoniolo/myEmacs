@@ -6,8 +6,9 @@
 (require 'package)
 
 (setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+;; elpa.gnu.org is blocked on this network (TCP connects but HTTPS hangs),
+;; so we rely on MELPA only, which mirrors virtually everything we need.
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -19,7 +20,7 @@
 
 ;;garbage collection setting
 (setq gc-cons-threshold 64000000) 
-(setq tramp-verbose 10) 
+(setq tramp-verbose 1) 
 
 ;;===================================================================
 ;; tweaks and minor settings
@@ -70,8 +71,6 @@
 
 ;; Show whitespace
 (global-set-key (kbd "<f10>") 'whitespace-mode)
-;;minimap toggle
-(global-set-key (kbd "<f12>") 'minimap-mode)
 ;;copy file path of current buffer to clip board
 (global-set-key (kbd "C-c C-/") 'er-copy-file-name-to-clipboard)
 ;; Easy undo key
@@ -126,18 +125,10 @@
   :ensure t
   :config (ivy-mode t))
 
-;;minimap on right side
-(use-package minimap
-  :ensure t
-  :config
-          (setq minimap-recenter-type 'middle)
-          (setq minimap-window-location 'right))
-
 ;;tramp for remote editing
 (use-package tramp
-  :ensure t
   :config
-  (setq default-tramp-method "plink")
+  (setq tramp-default-method "plink")
   (customize-set-variable 'tramp-default-user "johton2u"))
 ;;(setenv "PATH" (concat "c:/Users/john.toniolo/Documents/putty/;" (getenv "PATH")))
 
@@ -262,50 +253,18 @@
 (setq ediff-diff-program "C:\\Program Files\\Git\\usr\\bin\\diff.exe")
 (setq vc-handled-backends nil) 
 ;; END=========================================================================================
-
+(let ((notes-file "c:/Users/z004ka2x/OneDrive - Siemens AG/Documents/personal/Project_Notes.org"))
+  (when (file-exists-p notes-file)
+    (find-file notes-file)))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("78b4f4cf98bd74bb4efe1da37e9ddd8b72db24dcd7933685aff4a313f03428a5" default))
- '(ediff-diff-options "--binary -w")
- '(ediff-split-window-function 'split-window-horizontally)
- '(electric-indent-mode nil)
- '(grep-command
-   "grep --exclude-dir={Isrc} --color=always -s -n -e 2>/dev/null")
- '(grep-find-ignored-files
-   '(".#*" "*.o" "*~" "*.bin" "*.bak" "*.obj" "*.map" "*.ico" "*.pif" "*.lnk" "*.a" "*.ln" "*.blg" "*.bbl" "*.dll" "*.drv" "*.vxd" "*.386" "*.elc" "*.lof" "*.glo" "*.idx" "*.lot" "*.fmt" "*.tfm" "*.class" "*.fas" "*.lib" "*.mem" "*.x86f" "*.sparcf" "*.dfsl" "*.pfsl" "*.d64fsl" "*.p64fsl" "*.lx64fsl" "*.lx32fsl" "*.dx64fsl" "*.dx32fsl" "*.fx64fsl" "*.fx32fsl" "*.sx64fsl" "*.sx32fsl" "*.wx64fsl" "*.wx32fsl" "*.fasl" "*.ufsl" "*.fsl" "*.dxl" "*.lo" "*.la" "*.gmo" "*.mo" "*.toc" "*.aux" "*.cp" "*.fn" "*.ky" "*.pg" "*.tp" "*.vr" "*.cps" "*.fns" "*.kys" "*.pgs" "*.tps" "*.vrs" "*.pyc" "*.pyo"))
- '(package-selected-packages
-   '(vlf magit git matlab-mode async highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish swiper idle-highlight-mode expand-region auto-complete which-key use-package))
- '(standard-indent 2)
- '(vc-git-program "/home/gitdet/bin/git")
- '(warning-suppress-types '((mule)))
- '(whitespace-line-column 90))
+ '(custom-enabled-themes '(misterioso)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ediff-even-diff-A ((t (:background "dim gray"))))
- '(ediff-even-diff-Ancestor ((t (:background "dim gray"))))
- '(ediff-even-diff-B ((t (:background "dim gray"))))
- '(ediff-even-diff-C ((t (:background "dim gray"))))
- '(ediff-odd-diff-A ((t (:background "dim gray"))))
- '(ediff-odd-diff-Ancestor ((t (:background "dim gray"))))
- '(ediff-odd-diff-B ((t (:background "dim gray"))))
- '(ediff-odd-diff-C ((t (:background "dim gray"))))
- '(minimap-active-region-background ((((background dark)) (:background "#3f4f57")) (t (:background "#C847D8FEFFFF"))) nil 'minimap)
- '(which-func ((t (:foreground "alice blue"))))
- '(whitespace-empty ((t (:foreground "red" :strike-through t))))
- '(whitespace-line ((t (:background "dark slate blue"))))
- '(whitespace-newline ((t (:foreground "dark slate gray" :weight normal))))
- '(whitespace-space ((t (:distant-foreground "dark slate gray" :foreground "dark slate gray"))))
- '(whitespace-trailing ((t (:foreground "red" :strike-through t :weight bold)))))
- ;;original was red... what a harsh colour
- 
-(put 'dired-find-alternate-file 'disabled nil)
-(put 'upcase-region 'disabled nil)
-
-(find-file "c:/Users/z004ka2x/OneDrive - Siemens AG/Documents/personal/Project_Notes.org")
+ )

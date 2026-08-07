@@ -76,7 +76,7 @@
 ;; Easy undo key
 (global-set-key (kbd "C-/") 'undo)
 ;; Comment or uncomment the region
-(global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
+(global-set-key (kbd "C-;") 'comment-or-uncomment-region)
 ;;exand region
 (global-set-key (kbd "M-m") 'er/expand-region)
 
@@ -115,7 +115,8 @@
 
 ;; better search
 (use-package swiper
-  :ensure t)
+  :ensure t
+  :bind (("C-s" . swiper)))
 
 ;; autopair
 (electric-pair-mode 1)
@@ -125,13 +126,27 @@
   :ensure t
   :config (ivy-mode t))
 
-;;tramp for remote editing
-(use-package tramp
-  :config
-  (setq tramp-default-method "plink")
-  (customize-set-variable 'tramp-default-user "johton2u"))
-;;(setenv "PATH" (concat "c:/Users/john.toniolo/Documents/putty/;" (getenv "PATH")))
+(setq tramp-default-method "ssh")               ; native OpenSSH instead of plink
+(setq tramp-default-user "johton2u")            ; remote account differs from local Windows login
+(setq tramp-verbose 1)
+(setq remote-file-name-inhibit-locks t
+      remote-file-name-inhibit-auto-save-visited t)
 
+;; Windows Emacs cannot allocate a pty, so ssh does not request a remote tty
+;; ("Pseudo-terminal will not be allocated because stdin is not a terminal").
+;; Without a tty the remote bash starts non-interactive, PS1 is empty, and no
+;; prompt is ever printed -- so Tramp waits forever for one.  plink allocated a
+;; pty on its own, which is why it always worked.  Force ssh to do the same.
+(with-eval-after-load 'tramp-sh
+  (let* ((method (assoc "ssh" tramp-methods))
+         (cell   (assq 'tramp-login-args (cdr method))))
+    (unless (member '("-tt") (cadr cell))
+      (setf (cadr cell) (cons '("-tt") (cadr cell))))))
+
+(setq vc-handled-backends nil)                  ; or at least remove Git for remote
+(setq vc-ignore-dir-regexp
+      (format "\\(%s\\)\\|\\(%s\\)"
+              vc-ignore-dir-regexp tramp-file-name-regexp))
 ;;===================================================================
 ;; Custom Functions
 ;;===================================================================
@@ -145,35 +160,6 @@
     (when filename
       (kill-new filename)
       (message "buffer path '%s'" filename))))
-
-;;===================================================================
-;; custom ediff
-;;===================================================================
-(defun ds-diff (parent removepath)  
-  (setq buffersplit (split-string buffer-file-name "/"))
-  (setq relativepath "")
-  (concat parent relativepath)
-  (setq index removepath) ;;//<remote machine>/HOME/WRKSPS/<level>/<workspace>/ must be removed and replaced with //nas01deu/BSF/<level>
-                          ;;//1               /2   /3     /4      /5          /7
-  (while (< index (length buffersplit))
-    (setq relativepath (concat relativepath "/"))
-    (setq relativepath (concat relativepath (elt buffersplit index)))    
-    (setq index(1+ index))
-    )
-  (setq relativepath (concat parent relativepath))
-  
-  
-  (ediff buffer-file-name relativepath))
-
-(defun ds-ndiff (parent) ;;diff from network
-  (interactive "sParent path: ") ;;get parent path from user
-  (ds-diff parent 7))
-
-(defun ds-ldiff (parent) ;;from from local machine
-  (interactive "sParent path: ") ;;get parent path from user
-  (ds-diff parent 6))
-
-
 
 ;;===================================================================
 ;; header line
@@ -230,27 +216,25 @@
 (add-hook 'buffer-list-update-hook
           'sl/display-header)
 
-
 ;;=========================================================================================
 ;; Siemens Customization
 ;;=========================================================================================
 (defun johton2u-connect ()
   (interactive)
-  (find-file "/plink:orw-johton2u-r8.wv.mentorg.com:/wv/johton2u") )
+  (find-file "/ssh:orw-johton2u-r8.wv.mentorg.com:/wv/johton2u"))
 
 (defun lmweb-connect ()
   (interactive)
-  (find-file "/plink:orw-lmweb-r8.wv.mentorg.com:/wv/johton2u") )
+  (find-file "/ssh:orw-lmweb-r8.wv.mentorg.com:/wv/johton2u"))
 
 ;; (defun icbuild-connect ()
 ;;   (interactive)
-;;   (find-file "/plink:icbuild@orw-johton2u-r8.wv.mentorg.com:/wv/callic") )
+;;   (find-file "/ssh:icbuild@orw-johton2u-r8.wv.mentorg.com:/wv/callic"))
 
 (defun icbuild-connect ()
   (interactive)
-  (find-file "/plink:icbuild@icbuild-login:/wv/callic") )
+  (find-file "/ssh:icbuild@icbuild-login:/wv/callic"))
 
-(setq ediff-diff-program "C:\\Program Files\\Git\\usr\\bin\\diff.exe")
 (setq vc-handled-backends nil) 
 ;; END=========================================================================================
 (let ((notes-file "c:/Users/z004ka2x/OneDrive - Siemens AG/Documents/personal/Project_Notes.org"))
@@ -268,3 +252,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'dired-find-alternate-file 'disabled nil)

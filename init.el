@@ -1,4 +1,4 @@
-;; Emacs init file 2020:05:25
+;; Emacs init file 2026.08.07 JMT
 
 ;;===================================================================
 ;; package managers
@@ -19,18 +19,13 @@
 
 ;;garbage collection setting
 (setq gc-cons-threshold 64000000) 
-;; (set-language-environment "UTF-8")     
-;; (set-default-coding-systems 'utf-8)
-;; (define-coding-system-alias 'UTF-8 'utf-8)
+(setq tramp-verbose 10) 
+
 ;;===================================================================
 ;; tweaks and minor settings
 ;;===================================================================
-;;theme
-(load-theme 'misterioso t)
 ;;font
-(set-face-attribute 'default nil :height 110)
-; Set cursor color to white
-(set-cursor-color "#ff88ff") ;;pinkish
+(set-face-attribute 'default nil :height 105)
 ;;tab modes nil
 (setq-default indent-tabs-mode nil)
 ;;# of spaces for tab
@@ -51,7 +46,7 @@
 ;; Highlight the line we are currently on
 (global-hl-line-mode t)
 ;;line highlight color
-(set-face-background 'hl-line "#2D4948")
+(set-face-background 'hl-line "#404040")
 ;; small interface tweaks
 (setq inhibit-startup-message t)
 ;;no line wrapping
@@ -64,36 +59,17 @@
 (setq inhibit-splash-screen t)
 ;; Hide the scroll bar
 (scroll-bar-mode -1)
-;; Set default window size and position
-(setq default-frame-alist
-      '(;;(top . 0) (left . 0) ;; position
-        (width . 100) (height . 38) ;; size
-        ))
 ;;cursor never stop blinking
 (setq blink-cursor-blinks 0)
-;; Enable line numbers on the LHS
-(global-display-line-numbers-mode 0)
 ;; Don't ring the bell
 (setq ring-bell-function 'ignore)
 ;;y/n instead of yes/no
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; Disable the horrid auto-save
 (setq auto-save-default nil)
-;; Compilation command for C/C++
-(setq compile-command "g++ -std=c++14 ")
-;;;; Global Keyboard Shortcuts ;;;;;;;;;;;;;;;;;;;
-;;for general purpose, assigned macros to these
-(global-set-key (kbd "<f5>") 'ffive)
-(global-set-key (kbd "<f6>") 'fsix)
-(global-set-key (kbd "<f7>") 'fseven)
-(global-set-key (kbd "<f8>") 'feight)
 
 ;; Show whitespace
-;;(global-set-key (kbd "<f8>") 'compile)
-;; Show whitespace
 (global-set-key (kbd "<f10>") 'whitespace-mode)
-;;show whitespace
-;; (global-set-key (kbd "<f10>") 'treemacs)
 ;;minimap toggle
 (global-set-key (kbd "<f12>") 'minimap-mode)
 ;;copy file path of current buffer to clip board
@@ -102,95 +78,32 @@
 (global-set-key (kbd "C-/") 'undo)
 ;; Comment or uncomment the region
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
-;;open containing folder
-(global-set-key (kbd "C-c C-f") 'browse-file-directory)
 ;;exand region
 (global-set-key (kbd "M-m") 'er/expand-region)
-;;better search
-(global-set-key (kbd "C-s") 'swiper)
+
 ;;mouse keys
 (global-set-key (kbd "<mouse-4>") 'next-buffer)
 (global-set-key (kbd "<mouse-5>") 'previous-buffer)
 ;;use side scroller to scroll horizontally
 (setq mouse-wheel-tilt-scroll 1)
-;;save cursor position between sessions
-(save-place-mode 1)
+
 ;;keep buffer up to date if file changes outside emacs
 (global-auto-revert-mode t)
 ;;title bar shows full path
 (setq-default frame-title-format '("%b"))
 
-;; Org mode stuff
-(setq org-todo-keywords
-      '((sequence "TODO" "FEEDBACK" "VERIFY" "|" "DONE" "IGNORE")))
-
 ;; Smooth out the scrolling
  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; # line at a time
  (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-;; (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-;; (setq scroll-step 1) ;; keyboard scroll one line at a time
-;; (setq scroll-margin 3
-;;       scroll-step 1
-;;       scroll-conservatively 10000
-;;       scroll-preserve-screen-position 1)
-
-;; Dassault Style, 2 spaces, left brace under function and allied left
-(c-add-style "CTwo"
-	     '("bsd"
-	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
-	       (c-basic-offset . 2)))
-
-
-;; Dassault Style, 3 spaces, left brace under function and allied left
-(c-add-style "CThree"
-	     '("bsd"
-	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
-	       (c-basic-offset . 3)))
-
-;; Dassault Style, 4 spaces, left brace under function and allied left
-(c-add-style "CFour"
-	     '("bsd"
-	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
-	       (c-basic-offset . 4)))
-
-;; My Style, 3 spaces, left brace after function.
-(c-add-style "JMT"
-	     '("k&r"
-	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
-	       (c-basic-offset . 3)))
-
-;; My Style, 3 spaces, left brace after function.
-(c-add-style "CTab"
-	     '("bsd"
-	       (indent-tabs-mode . t)        ; use tabs
-	       (tab-width . 4)))
-
-(defun my-c++-mode-hook ()
-  (c-set-style "CFour"))
-(add-hook 'c++-mode-hook 'my-c++-mode-hook)
-
-(add-to-list 'auto-mode-alist '("\\.px\\'" . python-mode))
-(add-to-list 'auto-mode-alist '("\\.pyx\\'" . python-mode))
 
 ;;===================================================================
 ;; packages
 ;;===================================================================
-;; 'previous' frame to capital 'O' 
-(global-set-key (kbd "C-x O") 'previous-multiframe-window)
-
 ;; key binding guide
 (use-package which-key
   :ensure t
   :config
   (which-key-mode))
-
-;; simple autocomplete
-(use-package auto-complete
-  :ensure t
-  :init
-  (progn
-    (ac-config-default)
-    (global-auto-complete-mode t)))
 
 ;; expand region
 (use-package expand-region
@@ -208,13 +121,6 @@
 ;; autopair
 (electric-pair-mode 1)
 
-;;hide minor modes
-(use-package diminish
-  :ensure t)
-(diminish 'ivy-mode)
-(diminish 'minimap-mode)
-(diminish 'which-key-mode)
-
 ;;ivy for help with M-x commands
 (use-package ivy
   :ensure t
@@ -226,14 +132,6 @@
   :config
           (setq minimap-recenter-type 'middle)
           (setq minimap-window-location 'right))
- 
-;;treemacs <3
-(use-package treemacs
-  :ensure t)
-
-;;lua mode
-(use-package lua-mode
-  :ensure t)
 
 ;;tramp for remote editing
 (use-package tramp
@@ -243,24 +141,9 @@
   (customize-set-variable 'tramp-default-user "johton2u"))
 ;;(setenv "PATH" (concat "c:/Users/john.toniolo/Documents/putty/;" (getenv "PATH")))
 
-;;fold the code
-(use-package origami
-  :ensure t
-  :config
-  (global-set-key (kbd "M-p") 'origami-close-node)
-  (global-set-key (kbd "M-o") 'origami-open-node))
-
 ;;===================================================================
 ;; Custom Functions
 ;;===================================================================
-;; Open file's containing folder
-(defun browse-file-directory ()
-  "Open the current file's directory however the OS would."
-  (interactive)
-  (if default-directory
-      (browse-url-of-file (expand-file-name default-directory))
-    (error "No `default-directory' to open")))
-
 ;;grab file path from butter
 (defun er-copy-file-name-to-clipboard ()
   "Copy the current buffer file name to the clipboard."
@@ -271,26 +154,6 @@
     (when filename
       (kill-new filename)
       (message "buffer path '%s'" filename))))
-
-;;===================================================================
-;; HTML Tuning
-;;===================================================================
-;;html settings
-   (add-hook 'html-mode-hook
-        (lambda ()
-          ;; Default indentation is usually 2 spaces, changing to 4.
-          (set (make-local-variable 'sgml-basic-offset) 4)
-	  (setq-default indent-tabs-mode nil)))
-(add-to-list 'auto-mode-alist '("\\.xsd\\'" . xml-mode))
-(add-to-list 'auto-mode-alist '("\\.xslt\\'" . xml-mode))
-;;(add-to-list 'auto-mode-alist '("\\.css$" . html-mode))
-(add-to-list 'auto-mode-alist '("\\.cfm$" . html-mode))
-
-;;===================================================================
-;; keep emacs demon running for fast startups
-;;===================================================================
-(require 'server)
-(if (not (server-running-p)) (server-start))
 
 ;;===================================================================
 ;; custom ediff
@@ -384,30 +247,22 @@
   (interactive)
   (find-file "/plink:orw-johton2u-r8.wv.mentorg.com:/wv/johton2u") )
 
+(defun lmweb-connect ()
+  (interactive)
+  (find-file "/plink:orw-lmweb-r8.wv.mentorg.com:/wv/johton2u") )
+
+;; (defun icbuild-connect ()
+;;   (interactive)
+;;   (find-file "/plink:icbuild@orw-johton2u-r8.wv.mentorg.com:/wv/callic") )
+
 (defun icbuild-connect ()
   (interactive)
-  (find-file "/plink:icbuild@orw-johton2u-r8.wv.mentorg.com:/wv/callic") )
+  (find-file "/plink:icbuild@icbuild-login:/wv/callic") )
 
 (setq ediff-diff-program "C:\\Program Files\\Git\\usr\\bin\\diff.exe")
-
-;;=========================================================================================
-;; Centauri Customization
-;;=========================================================================================
-;; (setq find-program "C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\find.exe")
-;; (defun configure-grep-win ()
-;;   (interactive)
-;;   (grep-apply-setting 'grep-find-template "\"C:\\Program Files\\Git\\usr\\bin\\find.exe\" <D> <X> -type f <F> -exec \"C:\\Users\\john.toniolo\\AppData\\Roaming\\.emacs.d\\grep.exe\" <C> -s -n -e <R> \{\} NUL \;") )
-
-;; ;; (defun configure-grep-lin ()
-;; ;;   (interactive)
-;; ;;   (grep-apply-setting 'grep-find-template "/bin/find <D> <X> -type f <F> -exec /bin/grep <C> -s -n -e <R> \\{\\} NUL \\;") )
-;; (defun configure-grep-lin ()
-;;   (interactive)
-;;   (grep-apply-setting 'grep-find-template "/bin/find") )
-
-;; (setq ediff-diff-program "C:\\Program Files\\Git\\usr\\bin\\diff.exe")
-
+(setq vc-handled-backends nil) 
 ;; END=========================================================================================
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -423,7 +278,7 @@
  '(grep-find-ignored-files
    '(".#*" "*.o" "*~" "*.bin" "*.bak" "*.obj" "*.map" "*.ico" "*.pif" "*.lnk" "*.a" "*.ln" "*.blg" "*.bbl" "*.dll" "*.drv" "*.vxd" "*.386" "*.elc" "*.lof" "*.glo" "*.idx" "*.lot" "*.fmt" "*.tfm" "*.class" "*.fas" "*.lib" "*.mem" "*.x86f" "*.sparcf" "*.dfsl" "*.pfsl" "*.d64fsl" "*.p64fsl" "*.lx64fsl" "*.lx32fsl" "*.dx64fsl" "*.dx32fsl" "*.fx64fsl" "*.fx32fsl" "*.sx64fsl" "*.sx32fsl" "*.wx64fsl" "*.wx32fsl" "*.fasl" "*.ufsl" "*.fsl" "*.dxl" "*.lo" "*.la" "*.gmo" "*.mo" "*.toc" "*.aux" "*.cp" "*.fn" "*.ky" "*.pg" "*.tp" "*.vr" "*.cps" "*.fns" "*.kys" "*.pgs" "*.tps" "*.vrs" "*.pyc" "*.pyo"))
  '(package-selected-packages
-   '(magit git matlab-mode async highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish swiper idle-highlight-mode expand-region auto-complete which-key use-package))
+   '(vlf magit git matlab-mode async highlight-doxygen cmake-mode csharp-mode markdown-mode+ markdown-mode md-readme lua-mode treemacs minimap diminish swiper idle-highlight-mode expand-region auto-complete which-key use-package))
  '(standard-indent 2)
  '(vc-git-program "/home/gitdet/bin/git")
  '(warning-suppress-types '((mule)))

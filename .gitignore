@@ -1,3 +1,9 @@
-
-!init.el
-!.gitignore
+# per-machine Custom output
+custom.el
+# binaries -- not tracked anymore
+*.exe
+*.reg
+# emacs junk
+*~
+*.elc
+\#*\#

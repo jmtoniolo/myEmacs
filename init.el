@@ -79,11 +79,6 @@
 (setq inhibit-splash-screen t)
 ;; Hide the scroll bar
 (scroll-bar-mode -1)
-;; Set default window size and position
-(setq default-frame-alist
-      '(;;(top . 0) (left . 0) ;; position
-        (width . 100) (height . 38) ;; size
-        ))
 ;;cursor never stop blinking
 (setq blink-cursor-blinks 0)
 ;; Enable line numbers on the LHS
@@ -251,49 +246,10 @@ truncate (code) -> visual-line (word-wrapped prose) -> plain wrap -> truncate."
       (message "buffer path '%s'" filename))))
 
 ;;===================================================================
-;; HTML Tuning
-;;===================================================================
-;;html settings
-(add-hook 'html-mode-hook
-          (lambda ()
-            ;; Default indentation is usually 2 spaces, changing to 4.
-            (set (make-local-variable 'sgml-basic-offset) 4)
-            (setq-default indent-tabs-mode nil)))
-(add-to-list 'auto-mode-alist '("\\.xsd\\'" . xml-mode))
-(add-to-list 'auto-mode-alist '("\\.xslt\\'" . xml-mode))
-;;(add-to-list 'auto-mode-alist '("\\.css$" . html-mode))
-(add-to-list 'auto-mode-alist '("\\.cfm$" . html-mode))
-
-;;===================================================================
 ;; keep emacs demon running for fast startups
 ;;===================================================================
 (require 'server)
 (if (not (server-running-p)) (server-start))
-
-;;===================================================================
-;; custom ediff
-;;===================================================================
-(defun ds-diff (parent removepath)
-  (setq buffersplit (split-string buffer-file-name "/"))
-  (setq relativepath "")
-  (concat parent relativepath)
-  (setq index removepath) ;;//<remote machine>/HOME/WRKSPS/<level>/<workspace>/ must be removed and replaced with //nas01deu/BSF/<level>
-                          ;;//1               /2   /3     /4      /5          /7
-  (while (< index (length buffersplit))
-    (setq relativepath (concat relativepath "/"))
-    (setq relativepath (concat relativepath (elt buffersplit index)))
-    (setq index(1+ index))
-    )
-  (setq relativepath (concat parent relativepath))
-  (ediff buffer-file-name relativepath))
-
-(defun ds-ndiff (parent) ;;diff from network
-  (interactive "sParent path: ") ;;get parent path from user
-  (ds-diff parent 7))
-
-(defun ds-ldiff (parent) ;;from from local machine
-  (interactive "sParent path: ") ;;get parent path from user
-  (ds-diff parent 6))
 
 ;;===================================================================
 ;; header line
@@ -386,29 +342,6 @@ truncate (code) -> visual-line (word-wrapped prose) -> plain wrap -> truncate."
 (when jmt/linux-p
   ;; nothing Linux-only yet
   )
-
-;;=========================================================================================
-;; Faces (formerly in custom-set-faces)
-;;=========================================================================================
-(custom-set-faces
- '(ediff-even-diff-A ((t (:background "dim gray"))))
- '(ediff-even-diff-Ancestor ((t (:background "dim gray"))))
- '(ediff-even-diff-B ((t (:background "dim gray"))))
- '(ediff-even-diff-C ((t (:background "dim gray"))))
- '(ediff-odd-diff-A ((t (:background "dim gray"))))
- '(ediff-odd-diff-Ancestor ((t (:background "dim gray"))))
- '(ediff-odd-diff-B ((t (:background "dim gray"))))
- '(ediff-odd-diff-C ((t (:background "dim gray"))))
- '(which-func ((t (:foreground "alice blue"))))
- '(whitespace-empty ((t (:foreground "red" :strike-through t))))
- '(whitespace-line ((t (:background "dark slate blue"))))
- '(whitespace-newline ((t (:foreground "dark slate gray" :weight normal))))
- '(whitespace-space ((t (:distant-foreground "dark slate gray" :foreground "dark slate gray"))))
- '(whitespace-trailing ((t (:foreground "red" :strike-through t :weight bold)))))
- ;;original was red... what a harsh colour
-
-(put 'dired-find-alternate-file 'disabled nil)
-(put 'upcase-region 'disabled nil)
 
 ;;=========================================================================================
 ;; Open notes on startup (whichever machine we're on)

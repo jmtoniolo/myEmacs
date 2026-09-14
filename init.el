@@ -15,10 +15,7 @@
 (require 'package)
 
 (setq package-enable-at-startup nil)
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("gnu"   . "https://elpa.gnu.org/packages/")))
-;; NOTE: if elpa.gnu.org hangs on a locked-down network, drop the "gnu" entry --
-;; MELPA mirrors virtually everything used here.
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -97,8 +94,6 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; Disable the horrid auto-save
 (setq auto-save-default nil)
-;; Compilation command for C/C++
-(setq compile-command "g++ -std=c++14 ")
 ;;use side scroller to scroll horizontally
 (setq mouse-wheel-tilt-scroll 1)
 ;;save cursor position between sessions
@@ -112,10 +107,6 @@
 (setq electric-indent-mode nil)
 (setq standard-indent 2)
 (setq whitespace-line-column 90)
-
-;; Org mode stuff
-(setq org-todo-keywords
-      '((sequence "TODO" "FEEDBACK" "VERIFY" "|" "DONE" "IGNORE")))
 
 ;; Smooth out the scrolling
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; # line at a time
@@ -163,8 +154,6 @@ truncate (code) -> visual-line (word-wrapped prose) -> plain wrap -> truncate."
 (global-set-key (kbd "<f9>") 'cycle-through-linum-modes)
 ;; Show whitespace
 (global-set-key (kbd "<f10>") 'whitespace-mode)
-;;minimap toggle
-(global-set-key (kbd "<f12>") 'minimap-mode)
 ;;copy file path of current buffer to clip board
 (global-set-key (kbd "C-c C-/") 'er-copy-file-name-to-clipboard)
 ;; Easy undo key
@@ -182,67 +171,17 @@ truncate (code) -> visual-line (word-wrapped prose) -> plain wrap -> truncate."
 ;; 'previous' frame to capital 'O'
 (global-set-key (kbd "C-x O") 'previous-multiframe-window)
 
-;;===================================================================
-;; C / C++ styles
-;;===================================================================
-;; Dassault Style, 2 spaces, left brace under function and allied left
-(c-add-style "CTwo"
-	     '("bsd"
-	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
-	       (c-basic-offset . 2)))
-
-;; Dassault Style, 3 spaces, left brace under function and allied left
-(c-add-style "CThree"
-	     '("bsd"
-	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
-	       (c-basic-offset . 3)))
-
-;; Dassault Style, 4 spaces, left brace under function and allied left
-(c-add-style "CFour"
-	     '("bsd"
-	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
-	       (c-basic-offset . 4)))
-
-;; My Style, 3 spaces, left brace after function.
-(c-add-style "JMT"
-	     '("k&r"
-	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
-	       (c-basic-offset . 3)))
-
-;; Tabs style
-(c-add-style "CTab"
-	     '("bsd"
-	       (indent-tabs-mode . t)        ; use tabs
-	       (tab-width . 4)))
-
-(defun my-c++-mode-hook ()
-  (c-set-style "CFour"))
-(add-hook 'c++-mode-hook 'my-c++-mode-hook)
-
 (add-to-list 'auto-mode-alist '("\\.px\\'" . python-mode))
 (add-to-list 'auto-mode-alist '("\\.pyx\\'" . python-mode))
 
 ;;===================================================================
 ;; packages
 ;;===================================================================
-;;hide minor modes
-(use-package diminish
-  :ensure t)
-
 ;; key binding guide
 (use-package which-key
   :ensure t
-  :diminish which-key-mode
   :config
   (which-key-mode))
-
-;; simple autocomplete
-(use-package auto-complete
-  :ensure t
-  :init
-  (progn
-    (ac-config-default)
-    (global-auto-complete-mode t)))
 
 ;; expand region
 (use-package expand-region
@@ -261,31 +200,7 @@ truncate (code) -> visual-line (word-wrapped prose) -> plain wrap -> truncate."
 ;;ivy for help with M-x commands
 (use-package ivy
   :ensure t
-  :diminish ivy-mode
   :config (ivy-mode t))
-
-;;minimap on right side
-(use-package minimap
-  :ensure t
-  :diminish minimap-mode
-  :config
-  (setq minimap-recenter-type 'middle)
-  (setq minimap-window-location 'right))
-
-;;treemacs <3
-(use-package treemacs
-  :ensure t)
-
-;;lua mode
-(use-package lua-mode
-  :ensure t)
-
-;;fold the code
-(use-package origami
-  :ensure t
-  :config
-  (global-set-key (kbd "M-p") 'origami-close-node)
-  (global-set-key (kbd "M-o") 'origami-open-node))
 
 ;;===================================================================
 ;; tramp for remote editing
@@ -484,7 +399,6 @@ truncate (code) -> visual-line (word-wrapped prose) -> plain wrap -> truncate."
  '(ediff-odd-diff-Ancestor ((t (:background "dim gray"))))
  '(ediff-odd-diff-B ((t (:background "dim gray"))))
  '(ediff-odd-diff-C ((t (:background "dim gray"))))
- '(minimap-active-region-background ((((background dark)) (:background "#3f4f57")) (t (:background "#C847D8FEFFFF"))) nil 'minimap)
  '(which-func ((t (:foreground "alice blue"))))
  '(whitespace-empty ((t (:foreground "red" :strike-through t))))
  '(whitespace-line ((t (:background "dark slate blue"))))
